@@ -52,11 +52,11 @@ const skillGroups: SkillGroup[] = [
     category: "Concepts",
     icon: "🧠",
     skills: [
-      { name: "Machine Learning", level: 72 },
-      { name: "Artificial Intelligence", level: 78 },
-      { name: "Big Data Analysis", level: 70 },
-      { name: "NLP", level: 68 },
+      { name: "System Design", level: 75 },
+      { name: "Web Scraping", level: 88 },
+      { name: "Prompt Engineering", level: 82 },
       { name: "DSA", level: 80 },
+      { name: "RBAC & Auth", level: 78 },
     ],
   },
 ];

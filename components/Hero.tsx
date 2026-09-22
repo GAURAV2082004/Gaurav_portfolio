@@ -31,10 +31,10 @@ export default function Hero() {
     return () => clearTimeout(timeout);
   }, [displayed, deleting, titleIndex]);
 
-  // Floating particles
+  // Floating particles — kept minimal (12) for performance
   useEffect(() => {
     setParticles(
-      Array.from({ length: 30 }, (_, i) => ({
+      Array.from({ length: 12 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
@@ -114,16 +114,17 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Social links */}
         <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
           {[
             { label: "jadligaurav2082004@gmail.com", href: "mailto:jadligaurav2082004@gmail.com" },
             { label: "linkedin.com/in/gauravjadli04", href: "https://linkedin.com/in/gauravjadli04" },
-            { label: "+91 9920301770", href: "tel:+919920301770" },
+            { label: "github.com/GAURAV2082004", href: "https://github.com/GAURAV2082004" },
           ].map((link, i) => (
             <a
               key={i}
               href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
               data-hover
               className="text-gray-500 hover:text-cyan-400 transition-colors font-mono hover:underline underline-offset-4"
             >

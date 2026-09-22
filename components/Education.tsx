@@ -5,11 +5,12 @@ const courses = [
   "Operating Systems",
   "Computer Networks",
   "Database Management Systems",
-  "Machine Learning",
-  "Artificial Intelligence",
+  "Machine Learning & AI",
   "Big Data Analysis",
   "Natural Language Processing",
+  "Software Engineering",
 ];
+
 
 export default function Education() {
   return (
@@ -46,7 +47,7 @@ export default function Education() {
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500">CGPA:</span>
-                  <span className="text-lg font-bold text-cyan-400">6.02</span>
+                  <span className="text-lg font-bold text-cyan-400">6.24</span>
                   <span className="text-xs text-gray-500">/ 10</span>
                 </div>
               </div>

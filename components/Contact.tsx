@@ -45,11 +45,13 @@ export default function Contact() {
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500 font-mono">
             <a
-              href="tel:+919920301770"
+              href="https://github.com/GAURAV2082004"
+              target="_blank"
+              rel="noopener noreferrer"
               data-hover
               className="hover:text-cyan-400 transition-colors"
             >
-              📞 +91 9920301770
+              🐙 github.com/GAURAV2082004
             </a>
             <span className="text-gray-700">·</span>
             <a
