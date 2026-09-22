@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #030712;
+  color: #f9fafb;
+}
+
+/* Semi-transparent section backdrops so shards can be seen floating behind content */
+section {
+  background-color: transparent !important;
+  position: relative;
+}
+
+
+/* ─── Custom Scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #111827; }
+::-webkit-scrollbar-thumb { background: #22d3ee44; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #22d3ee88; }
+
+/* ─── Selection ────────────────────────────────────── */
+::selection { background-color: #22d3ee33; color: #22d3ee; }
+
+/* ─── Scroll Reveal (initial hidden) ───────────────── */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.reveal-visible {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ─── Keyframes ────────────────────────────────────── */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Click particle burst */
+@keyframes particle-burst {
+  0%   { transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(0); opacity: 0; }
+}
+
+/* Click ring expand */
+@keyframes click-ring {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
+
+/* Skill tooltip pop */
+@keyframes tooltip-pop {
+  0%   { opacity: 0; transform: translate(-50%, 6px) scale(0.92); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+/* Skill bar fill */
+@keyframes bar-fill {
+  0%   { width: 0%; }
+}
+
+/* Hero float */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* Gradient shimmer */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Glow pulse */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px #22d3ee33; }
+  50%       { box-shadow: 0 0 25px #22d3ee88, 0 0 50px #22d3ee22; }
+}
+
+/* Card tilt shimmer on hover */
+@keyframes tilt-shine {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+
+.animate-fade-in    { animation: fade-in 0.6s ease-out both; }
+.animate-float      { animation: float 4s ease-in-out infinite; }
+.animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+.animate-shimmer    {
+  background: linear-gradient(90deg, #22d3ee, #3b82f6, #a855f7, #22d3ee);
+  background-size: 300% auto;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Magnetic button hover */
+.btn-magnetic {
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.2s ease;
+}
+.btn-magnetic:hover {
+  box-shadow: 0 0 30px #22d3ee44;
+}
