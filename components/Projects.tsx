@@ -62,9 +62,16 @@ function ProjectCompactCard({
 
         <div className="flex min-h-0 flex-1 flex-col p-4 md:p-5">
           <div className="flex items-center justify-between gap-3 mb-2">
-            <span className="min-w-0 truncate text-[9px] font-mono uppercase tracking-wide text-gray-400 bg-gray-900 border border-gray-800 px-2 py-0.5 rounded-md">
-              {project.category}
-            </span>
+            <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
+              <span className="shrink-0 truncate text-[9px] font-mono uppercase tracking-wide text-gray-400 bg-gray-900 border border-gray-800 px-2 py-0.5 rounded-md">
+                {project.category}
+              </span>
+              {project.isPrivate && (
+                <span className="shrink-0 text-[9px] font-mono text-gray-500 bg-gray-900/70 border border-gray-800 px-2 py-0.5 rounded-md">
+                  🔒 Enterprise Internal
+                </span>
+              )}
+            </div>
             <span className="shrink-0 text-[9px] font-mono text-gray-600">{project.date}</span>
           </div>
 
@@ -102,7 +109,7 @@ function ProjectCompactCard({
           </div>
 
           <div className="mt-auto pt-2.5 text-[10px] font-mono font-bold text-cyan-400 group-hover:text-cyan-300 inline-flex items-center gap-1">
-            View Case Study <span aria-hidden>→</span>
+            Read more <span aria-hidden>→</span>
           </div>
         </div>
       </button>
