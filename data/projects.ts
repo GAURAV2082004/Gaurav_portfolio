@@ -44,7 +44,7 @@ export const projects: Project[] = [
     accentGradient: "from-purple-600 via-indigo-600 to-blue-500",
     accentBorder: "hover:border-purple-500/40",
     icon: "⚡",
-    imagePath: "/projects/price-intel.jpg",
+    imagePath: "/projects/price-intel.svg",
     imageAlt: "Competitor Price Intelligence Platform Dashboard & Comparative Pricing Matrix UI",
     isPrivate: true,
     technicalChallenge:
@@ -99,7 +99,7 @@ export const projects: Project[] = [
     accentGradient: "from-cyan-500 via-teal-500 to-emerald-500",
     accentBorder: "hover:border-cyan-500/40",
     icon: "🛡️",
-    imagePath: "/projects/siteintel.jpg",
+    imagePath: "/projects/siteintel.svg",
     imageAlt: "SiteIntel Real-Time DevOps Uptime & DOM Anomaly Detection Sentinel UI",
     isPrivate: true,
     technicalChallenge:
@@ -157,7 +157,7 @@ export const projects: Project[] = [
     accentGradient: "from-emerald-500 via-teal-600 to-cyan-600",
     accentBorder: "hover:border-emerald-500/40",
     icon: "📊",
-    imagePath: "/projects/scm-analytics.jpg",
+    imagePath: "/projects/scm-analytics.svg",
     imageAlt: "Wacky Brandhub International SCM Procurement & Financial Analytics Dashboard",
     technicalChallenge:
       "Built as an enterprise operations ERP & SCM platform for Wacky Brandhub International. Eliminating UI latency while keeping live Google Sheets synchronicity intact. Developed a hybrid synchronization engine (js/sheets-api.js + api/db.php) where changes trigger async Apps Script webhooks while MySQL caching guarantees instant 200ms dashboard loads.",
@@ -211,7 +211,7 @@ export const projects: Project[] = [
     accentGradient: "from-amber-500 via-orange-600 to-rose-600",
     accentBorder: "hover:border-amber-500/40",
     icon: "🤖",
-    imagePath: "/projects/ai-work-planner.jpg",
+    imagePath: "/projects/ai-work-planner.svg",
     imageAlt: "AI-Powered Work & Calendar Planner UI with Whisper Waveform and Kanban Task Board",
     technicalChallenge:
       "Parsing ambiguous conversational speech into deterministic calendar actions with strict timezone normalization. Integrated Whisper API audio transcription with GPT-4o-mini structured JSON outputs, combined with a PHP Deterministic Action Router that computes recurrence rules (RRULE) and handles continuous lead-up reminder countdowns.",
@@ -266,7 +266,7 @@ export const projects: Project[] = [
     accentGradient: "from-fuchsia-500 via-pink-600 to-purple-600",
     accentBorder: "hover:border-fuchsia-500/40",
     icon: "📚",
-    imagePath: "/projects/promptlib.jpg",
+    imagePath: "/projects/promptlib.svg",
     imageAlt: "PromptLib Curated Prompt Engineering Platform UI with Slide-In Code Drawer",
     technicalChallenge:
       "Architecting a scalable, high-throughput prompt catalog serving 600+ curated prompts across Copywriting, Coding, and Business Strategy with slide-in detail views, instant 1-click clipboard copying, and fine-grained Role-Based Access Control (RBAC).",
