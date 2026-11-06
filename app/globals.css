@@ -8,109 +8,167 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #030712;
+  color: #f3f4f6;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 body {
   background-color: #030712;
-  color: #f9fafb;
+  color: #f3f4f6;
+  overflow-x: hidden;
 }
 
-/* Semi-transparent section backdrops so shards can be seen floating behind content */
-section {
-  background-color: transparent !important;
+/* ─── Cyberpunk Custom Scrollbar ───────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050811;
+  border-left: 1px solid #111827;
+}
+::-webkit-scrollbar-thumb {
+  background: #00f5ff33;
+  border-radius: 2px;
+  border: 1px solid #00f5ff66;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f5ff88;
+  box-shadow: 0 0 10px #00f5ff;
+}
+
+/* ─── Cyber Selection ──────────────────────────────── */
+::selection {
+  background-color: #00f5ff33;
+  color: #00f5ff;
+}
+
+/* ─── Monospace Font Fallback ──────────────────────── */
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* ─── CRT Scanline Effect ──────────────────────────── */
+.cyber-scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 245, 255, 0.02) 50%,
+    rgba(0, 245, 255, 0.02)
+  );
+  background-size: 100% 4px;
+}
+
+/* ─── Cyber Grid Perspective ───────────────────────── */
+.cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(0, 245, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 245, 255, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.cyber-grid-dense {
+  background-image: 
+    linear-gradient(to right, rgba(0, 245, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 245, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ─── Cyber Glassmorphic Panel ─────────────────────── */
+.cyber-panel {
+  background: rgba(5, 8, 17, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 0 1px 1px rgba(0, 245, 255, 0.05);
+}
+
+.cyber-panel-hover:hover {
+  border-color: rgba(0, 245, 255, 0.4);
+  box-shadow: 0 12px 40px 0 rgba(0, 245, 255, 0.12), inset 0 0 15px 0 rgba(0, 245, 255, 0.08);
+}
+
+/* ─── Cyber Corner Brackets ────────────────────────── */
+.corner-bracket {
   position: relative;
 }
-
-
-/* ─── Custom Scrollbar ─────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #111827; }
-::-webkit-scrollbar-thumb { background: #22d3ee44; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #22d3ee88; }
-
-/* ─── Selection ────────────────────────────────────── */
-::selection { background-color: #22d3ee33; color: #22d3ee; }
-
-/* ─── Scroll Reveal (initial hidden) ───────────────── */
-.reveal-hidden {
-  opacity: 0;
-  transform: translateY(40px);
+.corner-bracket::before,
+.corner-bracket::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #00f5ff;
+  pointer-events: none;
+  transition: all 0.2s ease;
 }
-.reveal-visible {
-  opacity: 1 !important;
-  transform: none !important;
+.corner-bracket::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid #00f5ff;
+  border-left: 2px solid #00f5ff;
 }
-
-/* ─── Keyframes ────────────────────────────────────── */
-
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+.corner-bracket::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid #00f5ff;
+  border-right: 2px solid #00f5ff;
 }
 
-/* Click particle burst */
-@keyframes particle-burst {
-  0%   { transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0) scale(1); opacity: 1; }
-  100% { transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(0); opacity: 0; }
+/* ─── Animations ───────────────────────────────────── */
+@keyframes cyber-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
 }
 
-/* Click ring expand */
-@keyframes click-ring {
-  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* Skill tooltip pop */
-@keyframes tooltip-pop {
-  0%   { opacity: 0; transform: translate(-50%, 6px) scale(0.92); }
-  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+@keyframes agent-cursor-click {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.85) translate(-2px, -2px); }
+  100% { transform: scale(1); }
 }
 
-/* Skill bar fill */
-@keyframes bar-fill {
-  0%   { width: 0%; }
+@keyframes click-ripple {
+  0% { transform: scale(0.4); opacity: 1; }
+  100% { transform: scale(2.8); opacity: 0; }
 }
 
-/* Hero float */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-10px); }
+@keyframes typing-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
-/* Gradient shimmer */
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
+@keyframes text-glitch {
+  0%, 100% { text-shadow: 0 0 4px #00f5ff, 0 0 12px #00f5ff; }
+  25% { text-shadow: -2px 0 #ec4899, 2px 0 #00f5ff; }
+  50% { text-shadow: 2px 0 #ec4899, -2px 0 #00f5ff; }
+  75% { text-shadow: 0 0 8px #00f5ff; }
 }
 
-/* Glow pulse */
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 10px #22d3ee33; }
-  50%       { box-shadow: 0 0 25px #22d3ee88, 0 0 50px #22d3ee22; }
+.animate-cyber-pulse {
+  animation: cyber-pulse 4s ease-in-out infinite;
 }
 
-/* Card tilt shimmer on hover */
-@keyframes tilt-shine {
-  0%   { left: -100%; }
-  100% { left: 200%; }
+.animate-radar-sweep {
+  animation: radar-sweep 6s linear infinite;
 }
 
-.animate-fade-in    { animation: fade-in 0.6s ease-out both; }
-.animate-float      { animation: float 4s ease-in-out infinite; }
-.animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
-.animate-shimmer    {
-  background: linear-gradient(90deg, #22d3ee, #3b82f6, #a855f7, #22d3ee);
-  background-size: 300% auto;
-  animation: shimmer 3s linear infinite;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.animate-typing-cursor {
+  animation: typing-blink 0.9s infinite;
 }
 
-/* Magnetic button hover */
-.btn-magnetic {
-  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.2s ease;
+.animate-text-glitch:hover {
+  animation: text-glitch 0.4s ease infinite;
 }
-.btn-magnetic:hover {
-  box-shadow: 0 0 30px #22d3ee44;
+
+/* Button with cyber angle */
+.btn-cyber {
+  position: relative;
+  clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
