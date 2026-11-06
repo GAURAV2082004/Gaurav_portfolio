@@ -6,6 +6,7 @@ import ScrollReveal from "./ScrollReveal";
 export default function CyberContact() {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [status, setStatus] = useState<"idle" | "transmitting" | "sent" | "error">("idle");
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
   const globeCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -85,6 +86,12 @@ export default function CyberContact() {
     return () => cancelAnimationFrame(animId);
   }, []);
 
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("jadligaurav2082004@gmail.com");
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
@@ -102,8 +109,8 @@ export default function CyberContact() {
     setTimeout(() => {
       setTerminalLogs((prev) => [
         ...prev,
-        "[ACK] Transmission packet dispatched successfully: 200 OK",
-        "[CLIENT] Redirecting to default communication client...",
+        "[ACK] Transmission packet prepared: 200 OK",
+        "[GATEWAY] Opening communication client to dispatch message...",
       ]);
       setStatus("sent");
 
@@ -113,7 +120,7 @@ export default function CyberContact() {
         `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       );
       window.location.href = `mailto:jadligaurav2082004@gmail.com?subject=${subject}&body=${body}`;
-    }, 1400);
+    }, 1200);
   };
 
   return (
@@ -145,13 +152,19 @@ export default function CyberContact() {
 
                 {/* Direct Channel Badges */}
                 <div className="space-y-3 font-mono text-xs">
-                  <a
-                    href="mailto:jadligaurav2082004@gmail.com"
-                    className="flex items-center gap-3 p-3 rounded-xl bg-gray-950/80 border border-gray-800 hover:border-cyan-500/50 hover:text-cyan-300 transition-colors"
-                  >
-                    <span className="text-lg">✉️</span>
-                    <span className="truncate">jadligaurav2082004@gmail.com</span>
-                  </a>
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-gray-950/80 border border-gray-800">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="text-base">✉️</span>
+                      <span className="truncate text-gray-300">jadligaurav2082004@gmail.com</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleCopyEmail}
+                      className="ml-2 px-2.5 py-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/60 hover:bg-cyan-900 transition-colors text-[10px] font-bold flex-shrink-0"
+                    >
+                      {copiedEmail ? "COPIED!" : "COPY"}
+                    </button>
+                  </div>
 
                   <a
                     href="https://linkedin.com/in/gauravjadli04"
@@ -159,7 +172,7 @@ export default function CyberContact() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-xl bg-gray-950/80 border border-gray-800 hover:border-cyan-500/50 hover:text-cyan-300 transition-colors"
                   >
-                    <span className="text-lg">💼</span>
+                    <span className="text-base">💼</span>
                     <span className="truncate">linkedin.com/in/gauravjadli04 ↗</span>
                   </a>
 
@@ -169,7 +182,7 @@ export default function CyberContact() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-xl bg-gray-950/80 border border-gray-800 hover:border-cyan-500/50 hover:text-cyan-300 transition-colors"
                   >
-                    <span className="text-lg">🐙</span>
+                    <span className="text-base">🐙</span>
                     <span className="truncate">github.com/GAURAV2082004 ↗</span>
                   </a>
                 </div>
@@ -266,7 +279,7 @@ export default function CyberContact() {
                     />
                   </div>
 
-                  {/* Submission Logs Console (if transmitting or sent) */}
+                  {/* Submission Logs Console */}
                   {terminalLogs.length > 0 && (
                     <div className="p-3.5 rounded-lg bg-[#030712] border border-cyan-500/30 space-y-1.5 animate-fade-in font-mono text-[11px]">
                       {terminalLogs.map((log, i) => (

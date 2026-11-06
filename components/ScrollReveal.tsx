@@ -20,15 +20,23 @@ export default function ScrollReveal({
     const el = ref.current;
     if (!el) return;
 
+    // Check if element is already within the viewport on mount
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+      return;
+    }
+
     const initialStyles: Record<string, string> = {
       opacity: "0",
       transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
     };
 
-    if (direction === "up") initialStyles.transform = "translateY(40px)";
-    if (direction === "left") initialStyles.transform = "translateX(-40px)";
-    if (direction === "right") initialStyles.transform = "translateX(40px)";
-    if (direction === "fade") initialStyles.transform = "scale(0.95)";
+    if (direction === "up") initialStyles.transform = "translateY(30px)";
+    if (direction === "left") initialStyles.transform = "translateX(-30px)";
+    if (direction === "right") initialStyles.transform = "translateX(30px)";
+    if (direction === "fade") initialStyles.transform = "scale(0.96)";
 
     Object.assign(el.style, initialStyles);
 
@@ -36,11 +44,11 @@ export default function ScrollReveal({
       ([entry]) => {
         if (entry.isIntersecting) {
           el.style.opacity = "1";
-          el.style.transform = "translateY(0) translateX(0) scale(1)";
+          el.style.transform = "none";
           observer.unobserve(el);
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" }
     );
 
     observer.observe(el);

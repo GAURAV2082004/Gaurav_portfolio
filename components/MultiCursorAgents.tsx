@@ -125,6 +125,7 @@ interface AgentLiveState {
 }
 
 export default function MultiCursorAgents() {
+  const [mounted, setMounted] = useState(false);
   const [agentsActive, setAgentsActive] = useState(true);
   const [fleetExpanded, setFleetExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -150,6 +151,7 @@ export default function MultiCursorAgents() {
   stateRef.current = agentStates;
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -160,9 +162,9 @@ export default function MultiCursorAgents() {
 
   // Autonomous animation loop for each agent
   useEffect(() => {
-    if (!agentsActive) return;
+    if (!mounted || !agentsActive) return;
 
-    let isMounted = true;
+    let isRunning = true;
     const timeouts: NodeJS.Timeout[] = [];
     const activeAgentsList = isMobile ? AGENTS.slice(0, 3) : AGENTS;
 
@@ -171,7 +173,7 @@ export default function MultiCursorAgents() {
       let stepIndex = Math.floor(Math.random() * script.length);
 
       const runNextStep = () => {
-        if (!isMounted) return;
+        if (!isRunning) return;
 
         const currentWaypoint = script[stepIndex];
         stepIndex = (stepIndex + 1) % script.length;
@@ -189,7 +191,7 @@ export default function MultiCursorAgents() {
 
         // Smooth movement animation
         const animateMove = (now: number) => {
-          if (!isMounted) return;
+          if (!isRunning) return;
           const elapsed = now - startTime;
           const progress = Math.min(1, elapsed / duration);
 
@@ -230,7 +232,7 @@ export default function MultiCursorAgents() {
       };
 
       const handleWaypointAction = (wp: Waypoint) => {
-        if (!isMounted) return;
+        if (!isRunning) return;
 
         if (wp.action === "click") {
           // Trigger click pulse
@@ -243,7 +245,7 @@ export default function MultiCursorAgents() {
           }));
 
           const clickTimeout = setTimeout(() => {
-            if (!isMounted) return;
+            if (!isRunning) return;
             setAgentStates((prev) => ({
               ...prev,
               [agent.id]: {
@@ -259,7 +261,7 @@ export default function MultiCursorAgents() {
           let charIndex = 0;
 
           const typeInterval = setInterval(() => {
-            if (!isMounted) {
+            if (!isRunning) {
               clearInterval(typeInterval);
               return;
             }
@@ -280,7 +282,7 @@ export default function MultiCursorAgents() {
 
         // Wait for waypoint pause time, then proceed to next waypoint
         const pauseTimeout = setTimeout(() => {
-          if (!isMounted) return;
+          if (!isRunning) return;
           runNextStep();
         }, wp.pause);
         timeouts.push(pauseTimeout);
@@ -294,10 +296,12 @@ export default function MultiCursorAgents() {
     });
 
     return () => {
-      isMounted = false;
+      isRunning = false;
       timeouts.forEach((t) => clearTimeout(t));
     };
-  }, [agentsActive, isMobile]);
+  }, [mounted, agentsActive, isMobile]);
+
+  if (!mounted) return null;
 
   const activeAgents = isMobile ? AGENTS.slice(0, 3) : AGENTS;
 
@@ -327,7 +331,7 @@ export default function MultiCursorAgents() {
                       left: pos.x - state.x - 1,
                       top: pos.y - state.y - 1,
                       backgroundColor: agent.color,
-                      opacity: (0.4 / (ti + 1)),
+                      opacity: 0.4 / (ti + 1),
                       transform: `scale(${1 - ti * 0.25})`,
                       boxShadow: `0 0 6px ${agent.color}`,
                     }}
@@ -438,8 +442,16 @@ export default function MultiCursorAgents() {
           >
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${agentsActive ? "bg-cyan-400" : "bg-gray-500"}`} />
-                <span className={`relative inline-flex rounded-full h-2 w-2 ${agentsActive ? "bg-cyan-500" : "bg-gray-600"}`} />
+                <span
+                  className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    agentsActive ? "bg-cyan-400" : "bg-gray-500"
+                  }`}
+                />
+                <span
+                  className={`relative inline-flex rounded-full h-2 w-2 ${
+                    agentsActive ? "bg-cyan-500" : "bg-gray-600"
+                  }`}
+                />
               </span>
               <span className="text-[11px] font-mono font-bold tracking-wider text-cyan-300">
                 AI AGENT FLEET: {agentsActive ? `${activeAgents.length} ACTIVE` : "PAUSED"}
