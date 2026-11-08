@@ -243,70 +243,78 @@ export default function MultiCursorAgents() {
     };
 
     const acquireNextTarget = (agent: AgentConfig, now: number) => {
-      const motion = motionStatesRef.current[agent.id];
-      if (!motion) return;
+      try {
+        const motion = motionStatesRef.current[agent.id];
+        if (!motion) return;
 
-      const sec = activeSectionRef.current;
-      const targets = SECTION_TARGETS[sec] || SECTION_TARGETS.hero;
-      const targetDef = targets[Math.floor(Math.random() * targets.length)];
+        const sec = activeSectionRef.current || "hero";
+        const targets = SECTION_TARGETS[sec] || SECTION_TARGETS.hero;
+        if (!targets || targets.length === 0) return;
+        const targetDef = targets[Math.floor(Math.random() * targets.length)];
+        if (!targetDef) return;
 
-      const winW = window.innerWidth;
-      const winH = window.innerHeight;
+        const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
+        const winH = typeof window !== "undefined" ? window.innerHeight : 800;
 
-      // Find real DOM element
-      let tx = Math.max(30, Math.min(winW - 60, (agent.horizontalPercent / 100) * winW));
-      let ty = Math.max(100, Math.min(winH - 80, 160 + Math.random() * (winH - 240)));
-      let boxRect: { x: number; y: number; w: number; h: number } | null = null;
+        // Find real DOM element
+        let tx = Math.max(30, Math.min(winW - 60, (agent.horizontalPercent / 100) * winW));
+        let ty = Math.max(100, Math.min(winH - 80, 160 + Math.random() * (winH - 240)));
+        let boxRect: { x: number; y: number; w: number; h: number } | null = null;
 
-      const el = document.querySelector(targetDef.selector);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0 && rect.bottom > 80 && rect.top < winH - 60) {
-          tx = Math.max(30, Math.min(winW - 60, rect.left + rect.width / 2));
-          ty = Math.max(80, Math.min(winH - 60, rect.top + rect.height / 2));
-          boxRect = {
-            x: rect.left,
-            y: rect.top,
-            w: rect.width,
-            h: rect.height,
-          };
-        }
-      }
-
-      motion.startX = motion.curX;
-      motion.startY = motion.curY;
-      motion.targetX = tx;
-      motion.targetY = ty;
-      motion.startTime = now;
-      motion.duration = 600 + Math.random() * 250;
-      motion.isMoving = true;
-      motion.phase = "moving";
-
-      // Update badge text directly
-      const badgeSub = badgeSubElsRef.current[agent.id];
-      if (badgeSub) {
-        badgeSub.textContent = `Targeting: ${targetDef.name}`;
-      }
-
-      // If we found a real box, show the laser bounding frame on primary agent
-      if (boxRect && laserBoxElRef.current && (agent.id === "agent-01" || agent.id === "agent-03" || agent.id === "agent-05")) {
-        const lBox = laserBoxElRef.current;
-        lBox.style.transform = `translate3d(${boxRect.x}px, ${boxRect.y}px, 0)`;
-        lBox.style.width = `${boxRect.w}px`;
-        lBox.style.height = `${boxRect.h}px`;
-        lBox.style.borderColor = agent.color;
-        lBox.style.boxShadow = `0 0 20px ${agent.color}40, inset 0 0 10px ${agent.color}20`;
-        lBox.style.opacity = "1";
-
-        if (laserLabelElRef.current) {
-          laserLabelElRef.current.textContent = `TARGET LOCKED // ${targetDef.name}`;
-          laserLabelElRef.current.style.color = agent.color;
-          laserLabelElRef.current.style.borderColor = agent.color;
+        if (targetDef.selector) {
+          const el = document.querySelector(targetDef.selector);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0 && rect.bottom > 80 && rect.top < winH - 60) {
+              tx = Math.max(30, Math.min(winW - 60, rect.left + rect.width / 2));
+              ty = Math.max(80, Math.min(winH - 60, rect.top + rect.height / 2));
+              boxRect = {
+                x: rect.left,
+                y: rect.top,
+                w: rect.width,
+                h: rect.height,
+              };
+            }
+          }
         }
 
-        setTimeout(() => {
-          if (laserBoxElRef.current) laserBoxElRef.current.style.opacity = "0";
-        }, 2200);
+        motion.startX = motion.curX;
+        motion.startY = motion.curY;
+        motion.targetX = tx;
+        motion.targetY = ty;
+        motion.startTime = now;
+        motion.duration = 600 + Math.random() * 250;
+        motion.isMoving = true;
+        motion.phase = "moving";
+
+        // Update badge text directly
+        const badgeSub = badgeSubElsRef.current[agent.id];
+        if (badgeSub && targetDef.name) {
+          badgeSub.textContent = `Targeting: ${targetDef.name}`;
+        }
+
+        // If we found a real box, show the laser bounding frame on primary agent
+        if (boxRect && laserBoxElRef.current && (agent.id === "agent-01" || agent.id === "agent-03" || agent.id === "agent-05")) {
+          const lBox = laserBoxElRef.current;
+          lBox.style.transform = `translate3d(${boxRect.x}px, ${boxRect.y}px, 0)`;
+          lBox.style.width = `${boxRect.w}px`;
+          lBox.style.height = `${boxRect.h}px`;
+          lBox.style.borderColor = agent.color;
+          lBox.style.boxShadow = `0 0 20px ${agent.color}40, inset 0 0 10px ${agent.color}20`;
+          lBox.style.opacity = "1";
+
+          if (laserLabelElRef.current && targetDef.name) {
+            laserLabelElRef.current.textContent = `TARGET LOCKED // ${targetDef.name}`;
+            laserLabelElRef.current.style.color = agent.color;
+            laserLabelElRef.current.style.borderColor = agent.color;
+          }
+
+          setTimeout(() => {
+            if (laserBoxElRef.current) laserBoxElRef.current.style.opacity = "0";
+          }, 2200);
+        }
+      } catch {
+        // Fallback gracefully without breaking loop
       }
     };
 
