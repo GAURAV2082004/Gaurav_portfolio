@@ -35,7 +35,7 @@ export default function CyberNavbar() {
       if (current) setActiveSection(`#${current}`);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     // Update system clock
     const updateTime = () => {

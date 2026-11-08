@@ -39,7 +39,7 @@ export default function CyberContact() {
       // Draw latitude rings
       for (let lat = -60; lat <= 60; lat += 24) {
         ctx.beginPath();
-        const rLat = radius * Math.cos((lat * Math.PI) / 180);
+        const rLat = Math.abs(radius * Math.cos((lat * Math.PI) / 180));
         const yLat = centerY + radius * Math.sin((lat * Math.PI) / 180);
 
         ctx.ellipse(centerX, yLat, rLat, rLat * 0.35, 0, 0, Math.PI * 2);
@@ -52,7 +52,7 @@ export default function CyberContact() {
       for (let lon = 0; lon < 180; lon += 30) {
         const rad = ((lon + rotation * 50) * Math.PI) / 180;
         ctx.beginPath();
-        ctx.ellipse(centerX, centerY, radius * Math.cos(rad), radius, 0, 0, Math.PI * 2);
+        ctx.ellipse(centerX, centerY, Math.abs(radius * Math.cos(rad)), radius, 0, 0, Math.PI * 2);
         ctx.strokeStyle = "rgba(0, 245, 255, 0.25)";
         ctx.lineWidth = 1;
         ctx.stroke();

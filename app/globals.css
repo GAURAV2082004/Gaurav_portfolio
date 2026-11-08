@@ -166,6 +166,35 @@ body {
   animation: text-glitch 0.4s ease infinite;
 }
 
+@keyframes laser-sweep {
+  0% { transform: translateY(-100%); opacity: 0; }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(200%); opacity: 0; }
+}
+
+@keyframes selection-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 245, 255, 0.2), inset 0 0 8px rgba(0, 245, 255, 0.1); }
+  50% { box-shadow: 0 0 20px rgba(0, 245, 255, 0.5), inset 0 0 16px rgba(0, 245, 255, 0.25); }
+}
+
+@keyframes reticle-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-laser-sweep {
+  animation: laser-sweep 2s ease-in-out infinite;
+}
+
+.animate-selection-pulse {
+  animation: selection-pulse 1.8s ease-in-out infinite;
+}
+
+.animate-reticle-spin {
+  animation: reticle-spin 10s linear infinite;
+}
+
 /* Button with cyber angle */
 .btn-cyber {
   position: relative;
