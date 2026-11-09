@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ScrollReveal from "./ScrollReveal";
+import CyberBoxAgent from "./CyberBoxAgent";
 
 interface SkillNode {
   name: string;
@@ -71,11 +72,11 @@ export default function CyberSkills() {
         <ScrollReveal>
           {/* Section Terminal Header */}
           <div className="flex items-center gap-3 mb-12 font-mono">
-            <span className="text-cyan-400 text-sm font-bold">[04]</span>
+            <span className="text-[#ff3333] text-sm font-bold">[04]</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               // NEURAL_TECHNOLOGY_MATRIX
             </h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/40 via-gray-800 to-transparent ml-4" />
+            <div className="flex-1 h-px bg-gradient-to-r from-[#ff3333]/40 via-neutral-800 to-transparent ml-4" />
           </div>
         </ScrollReveal>
 
@@ -84,15 +85,15 @@ export default function CyberSkills() {
           <div className="lg:col-span-8 space-y-6">
             {SKILL_CLUSTERS.map((cluster, ci) => (
               <ScrollReveal key={cluster.category} delay={ci * 60} direction="up">
-                <div className="cyber-panel rounded-xl p-5 border border-gray-800 transition-all duration-300">
-                  <div className="flex items-center justify-between gap-3 mb-3 pb-2 border-b border-gray-800/80 font-mono">
+                <div className="cyber-panel rounded-xl p-5 border border-neutral-800 bg-[#0a0a0a] transition-all duration-300">
+                  <div className="flex items-center justify-between gap-3 mb-3 pb-2 border-b border-neutral-800/80 font-mono">
                     <div className="flex items-center gap-2">
                       <span className="text-xl">{cluster.icon}</span>
                       <h3 className="text-sm font-bold text-white tracking-wide uppercase">
                         {cluster.category}
                       </h3>
                     </div>
-                    <span className="text-[10px] text-gray-500 hidden sm:inline">
+                    <span className="text-[10px] text-neutral-500 hidden sm:inline">
                       {cluster.description}
                     </span>
                   </div>
@@ -108,12 +109,12 @@ export default function CyberSkills() {
                           onClick={() => setSelectedSkill(skill)}
                           className={`font-mono text-xs px-3.5 py-1.5 rounded-lg border transition-all cursor-pointer flex items-center gap-2 ${
                             isSelected
-                              ? "bg-cyan-950 text-cyan-300 border-cyan-400 shadow-[0_0_15px_rgba(0,245,255,0.35)] scale-105"
-                              : "bg-gray-950/80 text-gray-300 border-gray-800 hover:border-cyan-500/50 hover:text-cyan-400 hover:bg-gray-900"
+                              ? "bg-[#ff3333]/20 text-[#ff4d4d] border-[#ff3333] shadow-[0_0_15px_rgba(255,51,51,0.4)] scale-105"
+                              : "bg-neutral-950/80 text-neutral-300 border-neutral-800 hover:border-[#ff3333]/50 hover:text-[#ff4d4d] hover:bg-neutral-900"
                           }`}
                         >
                           <span>{skill.name}</span>
-                          <span className="text-[10px] text-cyan-400/80">
+                          <span className="text-[10px] text-[#ff4d4d]/80">
                             {skill.level}%
                           </span>
                         </button>
@@ -128,18 +129,54 @@ export default function CyberSkills() {
           {/* Right Column: Interactive Diagnostic Gauge HUD (4 cols) */}
           <div className="lg:col-span-4 sticky top-24">
             <ScrollReveal direction="left">
-              <div className="cyber-panel rounded-2xl p-6 border border-cyan-500/30 corner-bracket shadow-2xl font-mono">
-                <div className="flex items-center justify-between text-xs text-gray-400 pb-3 mb-4 border-b border-gray-800">
+              <div className="cyber-panel rounded-2xl p-6 border border-[#ff3333]/30 corner-bracket shadow-2xl font-mono relative overflow-hidden bg-[#0a0a0a]">
+                {/* Dedicated Box Agent Cursor for Skill Diagnostics */}
+                <CyberBoxAgent
+                  agent={{
+                    id: "agent-06",
+                    name: "Agent 06",
+                    role: "Auditor",
+                    color: "#ff3333",
+                  }}
+                  waypoints={[
+                    {
+                      xPercent: 35,
+                      yPercent: 30,
+                      action: "highlight",
+                      targetLabel: "TECH_NODE",
+                      statusText: "Auditing: Python & PHP 8 benchmarks",
+                      pause: 2400,
+                    },
+                    {
+                      xPercent: 55,
+                      yPercent: 58,
+                      action: "click",
+                      targetLabel: "LATENCY_GAUGE",
+                      statusText: "Testing query plan: < 200ms",
+                      pause: 2200,
+                    },
+                    {
+                      xPercent: 28,
+                      yPercent: 82,
+                      action: "type",
+                      targetLabel: "USE_CASE_SPEC",
+                      statusText: "RBAC & Sentinel vectors healthy",
+                      typeText: "0 vulnerabilities found",
+                      pause: 2600,
+                    },
+                  ]}
+                />
+                <div className="flex items-center justify-between text-xs text-neutral-400 pb-3 mb-4 border-b border-neutral-800">
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                    <span className="w-2 h-2 rounded-full bg-[#ff3333] animate-ping" />
                     <span>NODE_DIAGNOSTICS</span>
                   </div>
-                  <span className="text-cyan-400 font-bold">{selectedSkill.category}</span>
+                  <span className="text-[#ff4d4d] font-bold">{selectedSkill.category}</span>
                 </div>
 
                 <div className="space-y-5">
                   <div>
-                    <div className="text-[11px] text-gray-500 uppercase tracking-wider">
+                    <div className="text-[11px] text-neutral-500 uppercase tracking-wider">
                       TARGET_TECHNOLOGY
                     </div>
                     <div className="text-2xl font-extrabold text-white mt-0.5">
@@ -150,32 +187,32 @@ export default function CyberSkills() {
                   {/* Level Gauge */}
                   <div>
                     <div className="flex justify-between items-center text-xs mb-2">
-                      <span className="text-gray-400">PROFICIENCY INDEX:</span>
-                      <span className="text-cyan-400 font-bold text-sm">
+                      <span className="text-neutral-400">PROFICIENCY INDEX:</span>
+                      <span className="text-[#ff4d4d] font-bold text-sm">
                         {selectedSkill.level}% //{" "}
                         {selectedSkill.level >= 85 ? "EXPERT" : selectedSkill.level >= 75 ? "ADVANCED" : "PROFICIENT"}
                       </span>
                     </div>
 
-                    <div className="h-2 bg-gray-900 rounded-full overflow-hidden border border-gray-800">
+                    <div className="h-2 bg-neutral-900 rounded-full overflow-hidden border border-neutral-800">
                       <div
-                        className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500 shadow-[0_0_10px_#00f5ff]"
+                        className="h-full bg-gradient-to-r from-[#ff3333] to-[#e11d48] rounded-full transition-all duration-500 shadow-[0_0_10px_#ff3333]"
                         style={{ width: `${selectedSkill.level}%` }}
                       />
                     </div>
                   </div>
 
                   {/* Real Production Application */}
-                  <div className="p-3.5 rounded-xl bg-gray-950/80 border border-gray-800 text-xs font-sans">
-                    <div className="text-[10px] font-mono text-cyan-400 font-bold uppercase mb-1.5 flex items-center gap-1.5">
+                  <div className="p-3.5 rounded-xl bg-neutral-950/90 border border-neutral-800 text-xs font-sans">
+                    <div className="text-[10px] font-mono text-[#ff4d4d] font-bold uppercase mb-1.5 flex items-center gap-1.5">
                       <span>⚡</span> REAL-WORLD PRODUCTION APPLICATION
                     </div>
-                    <p className="text-gray-300 leading-relaxed">
+                    <p className="text-neutral-300 leading-relaxed">
                       {selectedSkill.useCase}
                     </p>
                   </div>
 
-                  <div className="pt-2 text-[10px] text-gray-500 flex items-center justify-between border-t border-gray-800/80">
+                  <div className="pt-2 text-[10px] text-neutral-500 flex items-center justify-between border-t border-neutral-800/80">
                     <span>STATUS: VALIDATED IN PROD</span>
                     <span className="text-emerald-400">● VERIFIED</span>
                   </div>

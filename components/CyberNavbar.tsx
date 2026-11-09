@@ -7,9 +7,7 @@ const navLinks = [
   { label: "02 // EXP", href: "#experience" },
   { label: "03 // PROJECTS", href: "#projects" },
   { label: "04 // SKILLS", href: "#skills" },
-  { label: "05 // EDU", href: "#education" },
-  { label: "06 // CERTS", href: "#certifications" },
-  { label: "07 // CONTACT", href: "#contact" },
+  { label: "05 // CONTACT", href: "#contact" },
 ];
 
 export default function CyberNavbar() {
@@ -19,25 +17,31 @@ export default function CyberNavbar() {
   const [sysTime, setSysTime] = useState("");
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
 
-      // Section spy
-      const sections = ["about", "experience", "projects", "skills", "education", "certifications", "contact"];
-      const current = sections.find((sec) => {
-        const el = document.getElementById(sec);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          return rect.top <= 160 && rect.bottom >= 160;
-        }
-        return false;
-      });
-      if (current) setActiveSection(`#${current}`);
+          const sections = ["about", "experience", "projects", "skills", "contact"];
+          const current = sections.find((sec) => {
+            const el = document.getElementById(sec);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              return rect.top <= 160 && rect.bottom >= 160;
+            }
+            return false;
+          });
+          if (current) setActiveSection(`#${current}`);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // Update system clock
+    // Live system clock ticker
     const updateTime = () => {
       const now = new Date();
       setSysTime(now.toLocaleTimeString("en-GB", { hour12: false }) + " UTC+5:30");
@@ -55,105 +59,96 @@ export default function CyberNavbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-mono ${
         scrolled
-          ? "bg-[#030712]/92 backdrop-blur-md border-b border-cyan-500/20 shadow-[0_4px_24px_rgba(0,0,0,0.8)]"
-          : "bg-transparent border-b border-white/5"
+          ? "bg-[#050505]/95 backdrop-blur-md border-b border-[#ff3333]/20 shadow-[0_4px_24px_rgba(0,0,0,0.85)]"
+          : "bg-[#050505]/60 backdrop-blur-sm border-b border-white/5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* Callsign & System Status */}
-        <div className="flex items-center gap-3">
-          <a
-            href="#hero"
-            className="flex items-center gap-2 group text-white tracking-wider"
-          >
-            <span className="text-cyan-400 font-bold text-lg tracking-tight group-hover:text-cyan-300 transition-colors">
-              GJ<span className="text-cyan-400 animate-pulse">_</span>
-            </span>
-            <span className="hidden sm:inline-block text-xs text-gray-400 border-l border-gray-800 pl-2">
-              DEV-OS <span className="text-cyan-400/80">v4.2</span>
-            </span>
-          </a>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          {/* Left: OS Telemetry Indicator */}
+          <div className="flex items-center space-x-3">
+            <a
+              href="#hero"
+              className="flex items-center space-x-2 text-sm font-bold tracking-wider text-white group"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff3333] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff3333]" />
+              </span>
+              <span className="group-hover:text-[#ff3333] transition-colors">
+                GAURAV-JADLI<span className="text-[#ff3333]">.DEV</span>
+              </span>
+            </a>
 
-          {/* Online telemetry indicator */}
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-800/40 text-[10px] text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-            <span>SYS_ONLINE</span>
-            <span className="text-gray-500">//</span>
-            <span className="text-gray-400">18ms</span>
+            <div className="hidden lg:flex items-center space-x-2 text-[11px] text-gray-500 pl-2 border-l border-gray-800">
+              <span className="text-[#ff4d4d] font-bold">SYS_ONLINE // 18ms</span>
+              <span>·</span>
+              <span className="text-gray-400">CPU: 14%</span>
+              <span>·</span>
+              <span className="text-emerald-400 font-bold">UPTIME: 99.98%</span>
+            </div>
           </div>
-        </div>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.href;
-            return (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`relative px-3 py-1.5 text-xs font-mono tracking-wider transition-all duration-200 rounded-md ${
-                  isActive
-                    ? "text-cyan-300 bg-cyan-950/60 border border-cyan-700/50 shadow-[0_0_12px_rgba(0,245,255,0.2)]"
-                    : "text-gray-400 hover:text-cyan-300 hover:bg-gray-900/60"
-                }`}
-              >
-                {link.label}
-              </a>
-            );
-          })}
-        </nav>
+          {/* Center/Right Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.href;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? "text-[#ff4d4d] bg-[#ff3333]/15 border border-[#ff3333]/40 shadow-[0_0_12px_rgba(255,51,51,0.25)] font-bold"
+                      : "text-gray-400 hover:text-white hover:bg-gray-900/60"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+          </nav>
 
-        {/* Right HUD: System Clock & CTA */}
-        <div className="flex items-center gap-3">
-          {sysTime && (
-            <span className="hidden xl:inline-block text-[11px] text-gray-500 font-mono tracking-wider bg-gray-950/80 px-2.5 py-1 rounded border border-gray-800">
-              {sysTime}
-            </span>
-          )}
+          {/* Right: Clock & Resume Uplink */}
+          <div className="hidden sm:flex items-center space-x-3 text-xs">
+            <span className="text-gray-400 text-[11px]">{sysTime}</span>
+            <a
+              href="mailto:jadligaurav2082004@gmail.com"
+              className="px-3 py-1 rounded bg-[#ff3333]/10 hover:bg-[#ff3333]/25 text-[#ff4d4d] border border-[#ff3333]/40 font-bold text-xs transition-all shadow-[0_0_10px_rgba(255,51,51,0.2)]"
+            >
+              [UPLINK]
+            </a>
+          </div>
 
-          <a
-            href="#contact"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono font-bold text-gray-950 bg-cyan-400 hover:bg-cyan-300 px-3.5 py-1.5 rounded-md transition-all shadow-[0_0_15px_rgba(0,245,255,0.3)] hover:shadow-[0_0_20px_rgba(0,245,255,0.5)]"
-          >
-            <span>UPLINK</span>
-            <span>→</span>
-          </a>
-
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu Hamburger */}
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 rounded-lg bg-gray-900/80 border border-gray-800 text-gray-400 hover:text-cyan-300"
-            aria-label="Toggle navigation terminal"
+            className="md:hidden p-2 text-gray-400 hover:text-white focus:outline-none"
+            aria-label="Toggle Navigation Menu"
           >
-            <div className="w-5 flex flex-col gap-1">
-              <span className={`block h-0.5 bg-current transition-all ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
-              <span className={`block h-0.5 bg-current transition-all ${menuOpen ? "opacity-0" : ""}`} />
-              <span className={`block h-0.5 bg-current transition-all ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
-            </div>
+            <span className="text-sm">{menuOpen ? "[✕]" : "[☰]"}</span>
           </button>
         </div>
       </div>
 
-      {/* Mobile Terminal Drawer */}
+      {/* Mobile Drawer */}
       {menuOpen && (
-        <div className="md:hidden bg-[#050811]/98 border-b border-cyan-500/20 px-6 py-5 backdrop-blur-xl animate-fade-in font-mono">
-          <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-3 pb-2 border-b border-gray-800">
-            // COMMAND_NAVIGATION_MENU
+        <div className="md:hidden bg-[#050505]/98 border-b border-[#ff3333]/30 px-4 py-4 space-y-2">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className="block px-3 py-2 rounded text-xs text-gray-300 hover:text-[#ff4d4d] hover:bg-gray-900 font-bold"
+            >
+              {link.label}
+            </a>
+          ))}
+          <div className="pt-2 border-t border-gray-800 text-[11px] text-gray-500 flex justify-between items-center">
+            <span>{sysTime}</span>
+            <span className="text-emerald-400">STATUS: OPERATIONAL</span>
           </div>
-          <ul className="flex flex-col gap-2">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="block text-sm text-gray-300 hover:text-cyan-400 hover:bg-cyan-950/40 px-3 py-2 rounded-lg border border-transparent hover:border-cyan-800/40 transition-colors"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       )}
     </header>

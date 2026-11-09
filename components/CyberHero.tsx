@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CyberBoxAgent from "./CyberBoxAgent";
+import DraggableWindow from "./DraggableWindow";
 
 const ROLES = [
   "Software Developer // Systems & AI Automation",
@@ -15,7 +17,7 @@ export default function CyberHero() {
   const [displayedRole, setDisplayedRole] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [sandboxLog, setSandboxLog] = useState<string[]>([
-    "[INIT] System kernel v4.2 loaded in 14ms",
+    "[KERNEL] System core v4.2 initialized in 14ms",
     "[AGENT-01] DOM crawler active: 10,000+ SKUs indexed",
     "[AGENT-02] Uptime sentinel healthy: 200+ domains online",
   ]);
@@ -28,9 +30,9 @@ export default function CyberHero() {
     if (!isDeleting && displayedRole.length < current.length) {
       timer = setTimeout(() => {
         setDisplayedRole(current.slice(0, displayedRole.length + 1));
-      }, 55);
+      }, 50);
     } else if (!isDeleting && displayedRole.length === current.length) {
-      timer = setTimeout(() => setIsDeleting(true), 2400);
+      timer = setTimeout(() => setIsDeleting(true), 2500);
     } else if (isDeleting && displayedRole.length > 0) {
       timer = setTimeout(() => {
         setDisplayedRole(displayedRole.slice(0, -1));
@@ -46,7 +48,7 @@ export default function CyberHero() {
   // Simulated live telemetry stream in sandbox terminal
   useEffect(() => {
     const extraLogs = [
-      "[DB:MYSQL] Query execution cached in 200ms",
+      "[DB:MYSQL] Query execution cached in 180ms",
       "[AI:WHISPER] Audio stream parsed to structured JSON",
       "[SCRAPER] 6-stage fallback parser reached 95.4% accuracy",
       "[ERP:SYNC] 2-way Google Sheets webhook synchronized",
@@ -55,8 +57,8 @@ export default function CyberHero() {
 
     const interval = setInterval(() => {
       const nextLog = extraLogs[Math.floor(Math.random() * extraLogs.length)];
-      setSandboxLog((prev) => [...prev.slice(-4), nextLog]);
-    }, 4500);
+      setSandboxLog((prev) => [...prev.slice(-3), nextLog]);
+    }, 4200);
 
     return () => clearInterval(interval);
   }, []);
@@ -68,35 +70,35 @@ export default function CyberHero() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative z-10">
         {/* Top OS Telemetry Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 px-4 py-2.5 rounded-lg bg-gray-950/70 border border-cyan-500/20 backdrop-blur-md text-[11px] font-mono text-gray-400">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 px-4 py-2.5 rounded-lg bg-[#0a0a0a]/80 border border-[#ff3333]/25 backdrop-blur-md text-[11px] font-mono text-gray-400">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-cyan-400 font-bold">GAURAV-JADLI.DEV</span>
-            <span className="text-gray-600">//</span>
-            <span>SYSTEM_KERNEL: v4.2</span>
+            <span className="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse" />
+            <span className="text-[#ff4d4d] font-bold">GAURAV-JADLI.DEV</span>
+            <span className="text-gray-700">//</span>
+            <span>KERNEL: v4.2_RELEASE</span>
           </div>
           <div className="flex items-center gap-4 text-gray-400">
             <span className="hidden sm:inline">ARCH: X86_64_AI</span>
-            <span className="hidden md:inline text-gray-600">//</span>
+            <span className="hidden md:inline text-gray-700">//</span>
             <span className="text-emerald-400 font-bold">STATUS: OPERATIONAL</span>
-            <span className="text-gray-600">//</span>
-            <span className="text-cyan-400 font-bold">6 AGENTS ONLINE</span>
+            <span className="text-gray-700">//</span>
+            <span className="text-[#ff4d4d] font-bold">SYS_LATENCY: 18ms</span>
           </div>
         </div>
 
-        {/* Main Grid: Headline & Terminal Diagnostics */}
+        {/* Main Grid: Headline & Interactive Draggable Terminal */}
         <div className="grid lg:grid-cols-12 gap-8 items-center mb-12">
           {/* Left Column: Big Headline & Bio (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-xs font-mono text-cyan-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff3333]/10 border border-[#ff3333]/40 text-xs font-mono text-[#ff4d4d]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff3333] animate-ping" />
               <span>AUTONOMOUS SYSTEMS &amp; AI DEVELOPER</span>
             </div>
 
             <div>
               <h1 className="text-4xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight text-white leading-none">
                 GAURAV <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-500 animate-text-glitch">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff3333] via-[#ff5555] to-orange-500 animate-text-glitch">
                   JADLI
                 </span>
               </h1>
@@ -104,16 +106,16 @@ export default function CyberHero() {
 
             {/* Terminal Typing Line */}
             <div className="h-12 flex items-center font-mono">
-              <div className="text-sm sm:text-lg text-cyan-300 flex items-center gap-2 bg-gray-950/80 px-4 py-2 rounded-lg border border-cyan-500/30 w-full overflow-hidden">
-                <span className="text-cyan-500 flex-shrink-0">&gt;</span>
+              <div className="text-sm sm:text-base text-gray-200 flex items-center gap-2 bg-[#0a0a0a]/90 px-4 py-2.5 rounded-lg border border-[#ff3333]/30 w-full overflow-hidden shadow-inner">
+                <span className="text-[#ff3333] flex-shrink-0">&gt;</span>
                 <span className="truncate">{displayedRole}</span>
-                <span className="w-2 h-5 bg-cyan-400 animate-typing-cursor inline-block flex-shrink-0" />
+                <span className="w-2 h-4 bg-[#ff3333] animate-typing-cursor inline-block flex-shrink-0" />
               </div>
             </div>
 
             <p className="text-gray-300 text-base sm:text-lg leading-relaxed max-w-2xl font-sans">
               Computer Engineering student at{" "}
-              <span className="text-cyan-300 font-medium">Pillai College of Engineering, University of Mumbai</span>{" "}
+              <span className="text-[#ff4d4d] font-medium">Pillai College of Engineering, University of Mumbai</span>{" "}
               (Graduating 2026). Specializing in high-throughput automation pipelines, autonomous scraping engines
               cataloging 10,000+ SKUs, real-time uptime sentinels monitoring 200+ domains, and enterprise ERP telemetry.
             </p>
@@ -122,14 +124,14 @@ export default function CyberHero() {
             <div className="flex flex-wrap items-center gap-4 pt-2 font-mono">
               <a
                 href="#projects"
-                className="btn-cyber px-6 py-3.5 bg-cyan-400 hover:bg-cyan-300 text-gray-950 font-bold text-sm tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(0,245,255,0.35)] hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all cursor-pointer"
+                className="btn-cyber px-6 py-3.5 bg-[#ff3333] hover:bg-[#ff1a1a] text-black font-extrabold text-sm tracking-wider flex items-center gap-2 shadow-[0_0_25px_rgba(255,51,51,0.4)] hover:shadow-[0_0_35px_rgba(255,51,51,0.6)] transition-all cursor-pointer"
               >
                 <span>[▶ VIEW_PROJECTS()]</span>
               </a>
 
               <a
                 href="#contact"
-                className="btn-cyber px-6 py-3.5 bg-gray-900/90 hover:bg-gray-800 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 font-bold text-sm tracking-wider flex items-center gap-2 transition-all cursor-pointer"
+                className="btn-cyber px-6 py-3.5 bg-gray-950/90 hover:bg-gray-900 text-[#ff4d4d] border border-[#ff3333]/50 hover:border-[#ff3333] font-bold text-sm tracking-wider flex items-center gap-2 transition-all cursor-pointer"
               >
                 <span>[&gt;_ INITIALIZE_CONTACT]</span>
               </a>
@@ -138,70 +140,106 @@ export default function CyberHero() {
                 href="https://github.com/GAURAV2082004"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-3.5 text-xs text-gray-400 hover:text-white border border-gray-800 hover:border-gray-700 rounded-lg transition-colors flex items-center gap-2 bg-gray-950/50"
+                className="px-4 py-3.5 text-xs text-gray-400 hover:text-white border border-gray-800 hover:border-[#ff3333]/40 rounded-lg transition-colors flex items-center gap-2 bg-[#0a0a0a]/60"
               >
                 <span>🐙 GITHUB_REPO ↗</span>
+              </a>
+
+              <a
+                href="https://linkedin.com/in/gaurav-jadli-00a892289"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-3.5 text-xs text-gray-400 hover:text-white border border-gray-800 hover:border-[#ff3333]/40 rounded-lg transition-colors flex items-center gap-2 bg-[#0a0a0a]/60"
+              >
+                <span>💼 LINKEDIN ↗</span>
               </a>
             </div>
           </div>
 
-          {/* Right Column: Interactive AI Agent Sandbox & Diagnostics (5 cols) */}
-          <div className="lg:col-span-5">
-            <div className="cyber-panel rounded-2xl overflow-hidden corner-bracket border border-cyan-500/30">
-              {/* Window Header */}
-              <div className="flex items-center justify-between px-4 py-3 bg-gray-950/90 border-b border-gray-800/80 font-mono text-xs text-gray-400">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-                  </div>
-                  <span className="text-gray-300 ml-2">agent_orchestrator.sh</span>
-                </div>
-                <span className="text-[10px] text-cyan-400 font-bold bg-cyan-950/70 border border-cyan-800/50 px-2 py-0.5 rounded">
-                  LIVE TELEMETRY
-                </span>
-              </div>
+          {/* Right Column: Interactive Draggable AI Agent Sandbox (5 cols) */}
+          <div className="lg:col-span-5 relative">
+            <DraggableWindow
+              title="agent_orchestrator.sh"
+              badge="LIVE TELEMETRY"
+              className="relative"
+            >
+              {/* Dedicated Embedded Agent Cursor */}
+              <CyberBoxAgent
+                agent={{
+                  id: "agent-01",
+                  name: "Agent 01",
+                  role: "Scraper",
+                  color: "#ff3333",
+                }}
+                waypoints={[
+                  {
+                    xPercent: 18,
+                    yPercent: 70,
+                    action: "type",
+                    targetLabel: "COMMAND_BUFFER",
+                    statusText: "Injecting DOM crawler queue...",
+                    typeText: "python3 scrape.py --skus=10482",
+                    pause: 2600,
+                  },
+                  {
+                    xPercent: 42,
+                    yPercent: 36,
+                    action: "highlight",
+                    targetLabel: "LOG_STREAM",
+                    statusText: "Auditing: 10,000+ SKUs parsed",
+                    pause: 2200,
+                  },
+                  {
+                    xPercent: 68,
+                    yPercent: 88,
+                    action: "click",
+                    targetLabel: "UPTIME_METRIC",
+                    statusText: "Pinging benchmark: 99.98%",
+                    pause: 2000,
+                  },
+                ]}
+              />
 
               {/* Console Body */}
-              <div className="p-4 sm:p-5 font-mono text-xs space-y-3 bg-[#030712]/95 min-h-[220px]">
-                <div className="text-gray-500 text-[11px] pb-2 border-b border-gray-800/60">
-                  // Multi-Agent Execution Node (Target Sandbox)
+              <div className="p-4 sm:p-5 font-mono text-xs space-y-3 bg-[#050505]/95 min-h-[220px]">
+                <div className="text-gray-500 text-[11px] pb-2 border-b border-gray-800/80 flex items-center justify-between">
+                  <span>// Multi-Agent Execution Node (Target Sandbox)</span>
+                  <span className="text-[#ff4d4d] text-[9px] animate-pulse">● DRAGGABLE WINDOW</span>
                 </div>
 
                 <div className="space-y-2">
                   {sandboxLog.map((log, i) => (
-                    <div key={i} className="flex items-start gap-2 animate-fade-in">
-                      <span className="text-cyan-400 flex-shrink-0">&gt;</span>
+                    <div key={i} className="flex items-start gap-2">
+                      <span className="text-[#ff3333] flex-shrink-0">&gt;</span>
                       <span className="text-gray-300 leading-relaxed font-mono">{log}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Blinking input simulation line */}
-                <div className="pt-2 flex items-center gap-2 text-cyan-300 border-t border-gray-900">
-                  <span className="text-cyan-500">&gt;</span>
+                <div className="pt-2 flex items-center gap-2 text-gray-200 border-t border-gray-900">
+                  <span className="text-[#ff3333]">&gt;</span>
                   <span className="text-gray-400 text-[11px]">waiting for next agent packet...</span>
-                  <span className="w-2 h-4 bg-cyan-400 animate-pulse" />
+                  <span className="w-2 h-4 bg-[#ff3333] animate-pulse" />
                 </div>
               </div>
 
               {/* Diagnostics Footer Bar */}
-              <div className="grid grid-cols-3 gap-1 px-4 py-2.5 bg-gray-950 border-t border-gray-800/80 text-center font-mono text-[10px]">
+              <div className="grid grid-cols-3 gap-1 px-4 py-2.5 bg-[#0a0a0a] border-t border-[#ff3333]/20 text-center font-mono text-[10px]">
                 <div>
                   <span className="text-gray-500">CPU LOAD: </span>
-                  <span className="text-cyan-400 font-bold">14%</span>
+                  <span className="text-[#ff4d4d] font-bold">14%</span>
                 </div>
                 <div>
                   <span className="text-gray-500">LATENCY: </span>
-                  <span className="text-emerald-400 font-bold">&lt; 200ms</span>
+                  <span className="text-emerald-400 font-bold">&lt; 180ms</span>
                 </div>
                 <div>
                   <span className="text-gray-500">UPTIME: </span>
                   <span className="text-blue-400 font-bold">99.98%</span>
                 </div>
               </div>
-            </div>
+            </DraggableWindow>
           </div>
         </div>
 
@@ -215,7 +253,7 @@ export default function CyberHero() {
           ].map((item, i) => (
             <div
               key={i}
-              className="cyber-panel cyber-panel-hover p-4 sm:p-5 rounded-xl border border-gray-800 transition-all duration-300"
+              className="cyber-panel cyber-panel-hover p-4 sm:p-5 rounded-xl border border-[#ff3333]/20 transition-all duration-300"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-gray-500 uppercase tracking-wider">{item.label}</span>
@@ -224,7 +262,7 @@ export default function CyberHero() {
               <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
                 {item.val}
               </div>
-              <div className="text-[11px] text-cyan-400/80 mt-1">{item.sub}</div>
+              <div className="text-[11px] text-[#ff4d4d] mt-1">{item.sub}</div>
             </div>
           ))}
         </div>

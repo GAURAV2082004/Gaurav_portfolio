@@ -1,5 +1,6 @@
 import CyberNavbar from "@/components/CyberNavbar";
 import CyberHero from "@/components/CyberHero";
+import TechTickerMarquee from "@/components/TechTickerMarquee";
 import CyberAbout from "@/components/CyberAbout";
 import CyberExperience from "@/components/CyberExperience";
 import CyberProjects from "@/components/CyberProjects";
@@ -8,23 +9,27 @@ import CyberEducation from "@/components/CyberEducation";
 import CyberCertifications from "@/components/CyberCertifications";
 import CyberContact from "@/components/CyberContact";
 import CyberBackground from "@/components/CyberBackground";
-import MultiCursorAgents from "@/components/MultiCursorAgents";
+import InteractiveCursorFX from "@/components/InteractiveCursorFX";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-[#030712] text-gray-100 overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-300">
-      {/* ─── Cyberpunk Atmospheric Canvas Background ─── */}
+    <main className="relative min-h-screen bg-[#050505] text-neutral-100 overflow-x-hidden selection:bg-[#ff3333]/30 selection:text-white font-sans">
+      {/* ─── Interactive Mouse Cursor Canvas: Glowing Trail & Spark Firework Bursts ─── */}
+      <InteractiveCursorFX />
+
+      {/* ─── Developer OS OLED Dark Atmospheric Background ─── */}
       <CyberBackground />
 
-      {/* ─── Multi-Cursor AI Agent Fleet Simulation (5-6 Artificial Cursors) ─── */}
-      <MultiCursorAgents />
-
-      {/* ─── Cyber Navigation HUD ─── */}
+      {/* ─── Top Telemetry OS Navigation Bar ─── */}
       <CyberNavbar />
 
-      {/* ─── Core Futuristic Sections ─── */}
+      {/* ─── Core Futuristic Developer OS Sections ─── */}
       <div className="relative z-10">
         <CyberHero />
+        
+        {/* ─── High-Velocity Technology Ticker Marquee ─── */}
+        <TechTickerMarquee />
+
         <CyberAbout />
         <CyberExperience />
         <CyberProjects />

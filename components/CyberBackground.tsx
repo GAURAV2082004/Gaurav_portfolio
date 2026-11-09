@@ -34,16 +34,16 @@ export default function CyberBackground() {
       char?: string;
     }
 
-    const chars = ["0", "1", "0x", "SYS", "AI", "API", "200", "DOM"];
-    const colors = ["#00f5ff", "#3b82f6", "#10b981", "#a855f7"];
-    const particles: Particle[] = Array.from({ length: 32 }, () => ({
+    const chars = ["0", "1", "0x", "SYS", "AI", "API", "200", "KERNEL", "REDIS", "SQL"];
+    const colors = ["#ff3333", "#ff6666", "#ef4444", "#ffffff", "#ff1a1a"];
+    const particles: Particle[] = Array.from({ length: 36 }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: -0.2 - Math.random() * 0.4,
-      size: Math.random() > 0.7 ? 9 : 2,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: -0.2 - Math.random() * 0.35,
+      size: Math.random() > 0.75 ? 8 : 2,
       color: colors[Math.floor(Math.random() * colors.length)],
-      alpha: 0.15 + Math.random() * 0.35,
+      alpha: 0.12 + Math.random() * 0.35,
       char: Math.random() > 0.65 ? chars[Math.floor(Math.random() * chars.length)] : undefined,
     }));
 
@@ -52,16 +52,16 @@ export default function CyberBackground() {
       frame++;
       ctx.clearRect(0, 0, width, height);
 
-      // Draw subtle ambient glow spots
+      // Draw subtle ambient glow spots (neon crimson red & dark slate)
       const gradient = ctx.createRadialGradient(
-        width * 0.2,
+        width * 0.25,
         height * 0.15,
         10,
-        width * 0.2,
+        width * 0.25,
         height * 0.15,
         width * 0.45
       );
-      gradient.addColorStop(0, "rgba(0, 245, 255, 0.04)");
+      gradient.addColorStop(0, "rgba(255, 51, 51, 0.05)");
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
@@ -105,23 +105,23 @@ export default function CyberBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Background Cyber Grid */}
-      <div className="absolute inset-0 cyber-grid opacity-30" />
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#050505]">
+      {/* Background Developer OS Grid */}
+      <div className="absolute inset-0 cyber-grid opacity-35" />
       
       {/* Dense micro-grid */}
-      <div className="absolute inset-0 cyber-grid-dense opacity-20" />
+      <div className="absolute inset-0 cyber-grid-dense opacity-25" />
 
-      {/* Radial Ambient Glow Orbs */}
-      <div className="absolute -top-32 -left-32 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[140px] animate-cyber-pulse pointer-events-none" />
-      <div className="absolute top-1/2 -right-40 w-[650px] h-[650px] bg-blue-600/10 rounded-full blur-[160px] animate-cyber-pulse pointer-events-none" style={{ animationDelay: "2s" }} />
-      <div className="absolute -bottom-40 left-1/3 w-[600px] h-[600px] bg-purple-600/8 rounded-full blur-[150px] animate-cyber-pulse pointer-events-none" style={{ animationDelay: "4s" }} />
+      {/* Radial Ambient Crimson Red Glow Orbs */}
+      <div className="absolute -top-32 -left-32 w-[600px] h-[600px] bg-[#ff3333]/10 rounded-full blur-[140px] animate-cyber-pulse pointer-events-none" />
+      <div className="absolute top-1/2 -right-40 w-[650px] h-[650px] bg-red-600/8 rounded-full blur-[160px] animate-cyber-pulse pointer-events-none" style={{ animationDelay: "2s" }} />
+      <div className="absolute -bottom-40 left-1/3 w-[600px] h-[600px] bg-[#ff1a1a]/8 rounded-full blur-[150px] animate-cyber-pulse pointer-events-none" style={{ animationDelay: "4s" }} />
 
       {/* Floating Canvas Elements */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
       {/* CRT Scanline Overlay */}
-      <div className="absolute inset-0 cyber-scanlines pointer-events-none opacity-40" />
+      <div className="absolute inset-0 cyber-scanlines pointer-events-none opacity-30" />
     </div>
   );
 }

@@ -18,8 +18,8 @@ const certifications = [
     year: "2024",
     certId: "HASH // GS-GENAI-WORKFLOW",
     icon: "🤖",
-    accent: "from-purple-500/20 to-indigo-500/10 border-purple-500/30",
-    textAccent: "text-purple-400",
+    accent: "from-red-500/20 to-rose-500/10 border-red-500/30",
+    textAccent: "text-rose-400",
   },
   {
     title: "Pandas Library Certificate",
@@ -27,8 +27,8 @@ const certifications = [
     year: "2025",
     certId: "HASH // KAGGLE-PANDAS-2025",
     icon: "🐼",
-    accent: "from-cyan-500/20 to-blue-500/10 border-cyan-500/30",
-    textAccent: "text-cyan-400",
+    accent: "from-[#ff3333]/20 to-red-600/10 border-[#ff3333]/30",
+    textAccent: "text-[#ff4d4d]",
   },
 ];
 
@@ -39,11 +39,11 @@ export default function CyberCertifications() {
         <ScrollReveal>
           {/* Section Terminal Header */}
           <div className="flex items-center gap-3 mb-12 font-mono">
-            <span className="text-cyan-400 text-sm font-bold">[06]</span>
+            <span className="text-[#ff3333] text-sm font-bold">[06]</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               // VERIFIED_CERTIFICATIONS
             </h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/40 via-gray-800 to-transparent ml-4" />
+            <div className="flex-1 h-px bg-gradient-to-r from-[#ff3333]/40 via-neutral-800 to-transparent ml-4" />
           </div>
         </ScrollReveal>
 
@@ -51,7 +51,7 @@ export default function CyberCertifications() {
           {certifications.map((cert, i) => (
             <ScrollReveal key={cert.title} delay={i * 80} direction="up">
               <div
-                className={`cyber-panel cyber-panel-hover rounded-2xl p-6 border ${cert.accent} transition-all duration-300 corner-bracket flex flex-col justify-between h-full font-mono`}
+                className={`cyber-panel cyber-panel-hover rounded-2xl p-6 border ${cert.accent} transition-all duration-300 corner-bracket flex flex-col justify-between h-full font-mono bg-[#0a0a0a]`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
@@ -62,9 +62,9 @@ export default function CyberCertifications() {
                     </span>
                   </div>
 
-                  <div className="text-[10px] text-gray-500 mb-1">{cert.certId}</div>
+                  <div className="text-[10px] text-neutral-500 mb-1">{cert.certId}</div>
 
-                  <h3 className="text-white font-bold text-base mb-2 leading-snug group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-white font-bold text-base mb-2 leading-snug group-hover:text-[#ff4d4d] transition-colors">
                     {cert.title}
                   </h3>
 
@@ -73,11 +73,11 @@ export default function CyberCertifications() {
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-gray-800/80 flex items-center justify-between text-xs text-gray-400">
-                  <span className="bg-gray-950 px-2.5 py-1 rounded border border-gray-800">
+                <div className="mt-6 pt-4 border-t border-neutral-800/80 flex items-center justify-between text-xs text-neutral-400">
+                  <span className="bg-neutral-950 px-2.5 py-1 rounded border border-neutral-800">
                     YEAR: {cert.year}
                   </span>
-                  <span className="text-cyan-400 text-[11px] font-bold">
+                  <span className="text-[#ff4d4d] text-[11px] font-bold">
                     CREDENTIAL_VALID ✓
                   </span>
                 </div>
