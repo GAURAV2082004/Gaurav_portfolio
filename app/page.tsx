@@ -9,15 +9,11 @@ import CyberEducation from "@/components/CyberEducation";
 import CyberCertifications from "@/components/CyberCertifications";
 import CyberContact from "@/components/CyberContact";
 import CyberBackground from "@/components/CyberBackground";
-import InteractiveCursorFX from "@/components/InteractiveCursorFX";
 import InteractiveTerminalCLI from "@/components/InteractiveTerminalCLI";
 
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-[#050505] text-neutral-100 overflow-x-hidden selection:bg-[#ff3333]/30 selection:text-white font-sans">
-      {/* ─── Interactive Mouse Cursor Canvas: Glowing Trail & Spark Firework Bursts ─── */}
-      <InteractiveCursorFX />
-
       {/* ─── Developer OS OLED Dark Atmospheric Background ─── */}
       <CyberBackground />
 

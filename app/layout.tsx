@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import InteractiveCursorFX from "@/components/InteractiveCursorFX";
 
 const SITE_URL = "https://gaurav-portfolio-phi-three.vercel.app";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#030712",
+  themeColor: "#050505",
 };
 
 export const metadata: Metadata = {
@@ -59,7 +60,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth dark">
-      <body className="bg-[#030712] text-gray-100 font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-300">
+      <body className="bg-[#050505] text-neutral-100 font-sans antialiased selection:bg-[#ff3333]/30 selection:text-white">
+        {/* Global Interactive Custom Cursor & Click Fireworks */}
+        <InteractiveCursorFX />
         {children}
       </body>
     </html>
