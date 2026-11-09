@@ -81,16 +81,26 @@ export default function InteractiveCursorFX() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
+      {/* Targeting Reticle Ring with 4 Crosshair Ticks */}
       <div
-        className={`absolute rounded-full border border-red-500/80 transition-transform duration-100 ease-out flex items-center justify-center ${
+        className={`absolute rounded-full border border-red-500/80 shadow-[0_0_12px_rgba(255,51,51,0.4)] transition-transform duration-100 ease-out flex items-center justify-center ${
           isPointer ? "w-12 h-12 bg-red-500/10 scale-125" : "w-8 h-8 scale-100"
         }`}
         style={{
           transform: `translate3d(${position.x - (isPointer ? 24 : 16)}px, ${position.y - (isPointer ? 24 : 16)}px, 0)`,
         }}
       >
+        {/* Reticle Crosshair Ticks */}
+        <div className="absolute -top-1 w-0.5 h-1.5 bg-red-500/80" />
+        <div className="absolute -bottom-1 w-0.5 h-1.5 bg-red-500/80" />
+        <div className="absolute -left-1 w-1.5 h-0.5 bg-red-500/80" />
+        <div className="absolute -right-1 w-1.5 h-0.5 bg-red-500/80" />
+
+        {/* Center Pulsing Red Dot */}
         <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping" />
       </div>
+
+      {/* Radial Burst Click Fireworks */}
       {particles.map((p) => (
         <div
           key={p.id}
