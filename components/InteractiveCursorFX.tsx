@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-interface Particle {
+interface SparkParticle {
   x: number;
   y: number;
   vx: number;
@@ -19,6 +19,11 @@ export default function InteractiveCursorFX() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    // Only mount on desktop/pointer devices
+    if (typeof window === "undefined" || window.matchMedia("(pointer: coarse)").matches) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -35,82 +40,128 @@ export default function InteractiveCursorFX() {
     };
     window.addEventListener("resize", onResize);
 
-    const trailParticles: Particle[] = [];
-    const burstParticles: Particle[] = [];
+    // Particle pools
+    const trailParticles: SparkParticle[] = [];
+    const burstParticles: SparkParticle[] = [];
 
-    const sparkColors = ["#ff3333", "#ff1a1a", "#ff5555", "#fbbf24", "#ffffff", "#ff4d4d"];
+    const sparkPalette = [
+      "#ff3333",
+      "#ffffff",
+      "#ff4d4d",
+      "#ff8080",
+      "#ff1a1a",
+      "#fca5a5",
+    ];
 
-    let lastMouseX = -100;
-    let lastMouseY = -100;
+    // Mouse coordinates & lerped follower coordinates
+    let mouseX = -200;
+    let mouseY = -200;
+    let ringX = -200;
+    let ringY = -200;
+    let ringSize = 24;
+    let targetRingSize = 24;
+    let isHoveringInteractive = false;
+    let isMouseDown = false;
+    let hasMoved = false;
 
-    // Track mouse move for continuous trailing glow
     const onMouseMove = (e: MouseEvent) => {
-      const x = e.clientX;
-      const y = e.clientY;
-      lastMouseX = x;
-      lastMouseY = y;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!hasMoved) {
+        ringX = mouseX;
+        ringY = mouseY;
+        hasMoved = true;
+      }
 
-      // Spawn 2-3 trailing particles on motion
+      // Check if mouse is hovering over an interactive element
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.closest("a") ||
+          target.closest("button") ||
+          target.closest("input") ||
+          target.closest("textarea") ||
+          target.closest("[role='button']") ||
+          target.classList.contains("cursor-pointer"))
+      ) {
+        isHoveringInteractive = true;
+        targetRingSize = 40;
+      } else {
+        isHoveringInteractive = false;
+        targetRingSize = 24;
+      }
+
+      // Spawn mouse-following red/white particle trail
       for (let i = 0; i < 2; i++) {
         trailParticles.push({
-          x: x + (Math.random() - 0.5) * 6,
-          y: y + (Math.random() - 0.5) * 6,
-          vx: (Math.random() - 0.5) * 0.8,
-          vy: (Math.random() - 0.5) * 0.8 - 0.2,
-          size: 2 + Math.random() * 2.5,
-          color: sparkColors[Math.floor(Math.random() * 3)],
-          alpha: 0.8,
+          x: mouseX + (Math.random() - 0.5) * 4,
+          y: mouseY + (Math.random() - 0.5) * 4,
+          vx: (Math.random() - 0.5) * 0.9,
+          vy: (Math.random() - 0.5) * 0.9 - 0.25,
+          size: 1.5 + Math.random() * 2.2,
+          color: sparkPalette[Math.floor(Math.random() * sparkPalette.length)],
+          alpha: 0.9,
           life: 0,
-          maxLife: 28 + Math.random() * 15,
+          maxLife: 24 + Math.random() * 16,
         });
       }
     };
 
-    // Trigger glowing particle firework burst on click
     const onMouseDown = (e: MouseEvent) => {
+      isMouseDown = true;
       const clickX = e.clientX;
       const clickY = e.clientY;
 
-      // 30-40 spark particles radiating outwards with velocity & gravity
-      const sparkCount = 32;
+      // Burst of 36 glowing sparks
+      const sparkCount = 36;
       for (let i = 0; i < sparkCount; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = 2 + Math.random() * 6.5;
+        const speed = 2.5 + Math.random() * 6.5;
 
         burstParticles.push({
           x: clickX,
           y: clickY,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          size: 1.5 + Math.random() * 2.8,
-          color: sparkColors[Math.floor(Math.random() * sparkColors.length)],
+          size: 1.5 + Math.random() * 2.6,
+          color: sparkPalette[Math.floor(Math.random() * sparkPalette.length)],
           alpha: 1,
           life: 0,
-          maxLife: 35 + Math.random() * 25,
+          maxLife: 32 + Math.random() * 24,
           gravity: 0.08,
         });
       }
 
-      // Add a shockwave ring particle
+      // Shockwave ring
       burstParticles.push({
         x: clickX,
         y: clickY,
         vx: 0,
         vy: 0,
-        size: 8,
+        size: 6,
         color: "#ff3333",
-        alpha: 0.9,
+        alpha: 0.95,
         life: 0,
-        maxLife: 20,
+        maxLife: 22,
       });
+    };
+
+    const onMouseUp = () => {
+      isMouseDown = false;
     };
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("mousedown", onMouseDown, { passive: true });
+    window.addEventListener("mouseup", onMouseUp, { passive: true });
 
-    // Animation render loop
+    // Render loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+
+      // Smooth lerp follower ring towards mouse
+      ringX += (mouseX - ringX) * 0.22;
+      ringY += (mouseY - ringY) * 0.22;
+      ringSize += (targetRingSize - ringSize) * 0.18;
 
       // Render & update trail particles
       for (let i = trailParticles.length - 1; i >= 0; i--) {
@@ -124,7 +175,7 @@ export default function InteractiveCursorFX() {
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 6;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
@@ -135,7 +186,7 @@ export default function InteractiveCursorFX() {
         }
       }
 
-      // Render & update click burst particles
+      // Render & update burst particles
       for (let i = burstParticles.length - 1; i >= 0; i--) {
         const p = burstParticles[i];
         p.life++;
@@ -151,9 +202,9 @@ export default function InteractiveCursorFX() {
         ctx.shadowBlur = 10;
         ctx.beginPath();
 
-        // If it's the shockwave ring
         if (p.vx === 0 && p.vy === 0) {
-          p.size += 2.5;
+          // Expanding Shockwave ring
+          p.size += 2.8;
           ctx.strokeStyle = p.color;
           ctx.lineWidth = 1.5;
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -169,9 +220,51 @@ export default function InteractiveCursorFX() {
         }
       }
 
-      // Cap array lengths for performance
-      if (trailParticles.length > 80) trailParticles.splice(0, trailParticles.length - 80);
-      if (burstParticles.length > 120) burstParticles.splice(0, burstParticles.length - 120);
+      // Render futuristic custom cursor reticle if mouse is on screen
+      if (hasMoved && mouseX > 0 && mouseY > 0) {
+        // Outer targeting reticle ring
+        ctx.save();
+        ctx.strokeStyle = isHoveringInteractive ? "#ff3333" : "rgba(255, 51, 51, 0.65)";
+        ctx.lineWidth = isHoveringInteractive ? 1.8 : 1.2;
+        ctx.shadowColor = "#ff3333";
+        ctx.shadowBlur = isHoveringInteractive ? 14 : 6;
+        ctx.beginPath();
+        ctx.arc(ringX, ringY, isMouseDown ? ringSize * 0.7 : ringSize / 2, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 4 Reticle Ticks on the ring
+        const r = isMouseDown ? ringSize * 0.7 : ringSize / 2;
+        const tickLen = 4;
+        ctx.beginPath();
+        // Top tick
+        ctx.moveTo(ringX, ringY - r - tickLen);
+        ctx.lineTo(ringX, ringY - r + tickLen);
+        // Bottom tick
+        ctx.moveTo(ringX, ringY + r - tickLen);
+        ctx.lineTo(ringX, ringY + r + tickLen);
+        // Left tick
+        ctx.moveTo(ringX - r - tickLen, ringY);
+        ctx.lineTo(ringX - r + tickLen, ringY);
+        // Right tick
+        ctx.moveTo(ringX + r - tickLen, ringY);
+        ctx.lineTo(ringX + r + tickLen, ringY);
+        ctx.stroke();
+        ctx.restore();
+
+        // Center reticle dot attached directly to mouseX, mouseY
+        ctx.save();
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#ff3333";
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Prevent memory buildup
+      if (trailParticles.length > 70) trailParticles.splice(0, trailParticles.length - 70);
+      if (burstParticles.length > 100) burstParticles.splice(0, burstParticles.length - 100);
 
       animId = requestAnimationFrame(render);
     };
@@ -182,6 +275,7 @@ export default function InteractiveCursorFX() {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mouseup", onMouseUp);
       cancelAnimationFrame(animId);
     };
   }, []);

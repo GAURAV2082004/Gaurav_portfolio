@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { sound } from "@/lib/audio";
 
 const navLinks = [
   { label: "01 // ABOUT", href: "#about" },
@@ -15,6 +16,7 @@ export default function CyberNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [sysTime, setSysTime] = useState("");
+  const [soundActive, setSoundActive] = useState(false);
 
   useEffect(() => {
     let ticking = false;
@@ -55,6 +57,15 @@ export default function CyberNavbar() {
     };
   }, []);
 
+  const toggleSound = () => {
+    const nextState = !soundActive;
+    sound.enabled = nextState;
+    setSoundActive(nextState);
+    if (nextState) {
+      sound.playBeep();
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-mono ${
@@ -69,6 +80,7 @@ export default function CyberNavbar() {
           <div className="flex items-center space-x-3">
             <a
               href="#hero"
+              onClick={() => sound.playClick(900)}
               className="flex items-center space-x-2 text-sm font-bold tracking-wider text-white group"
             >
               <span className="relative flex h-2 w-2">
@@ -80,10 +92,10 @@ export default function CyberNavbar() {
               </span>
             </a>
 
-            <div className="hidden lg:flex items-center space-x-2 text-[11px] text-gray-500 pl-2 border-l border-gray-800">
+            <div className="hidden lg:flex items-center space-x-2 text-[11px] text-neutral-500 pl-2 border-l border-neutral-800">
               <span className="text-[#ff4d4d] font-bold">SYS_ONLINE // 18ms</span>
               <span>·</span>
-              <span className="text-gray-400">CPU: 14%</span>
+              <span className="text-neutral-400">CPU: 14%</span>
               <span>·</span>
               <span className="text-emerald-400 font-bold">UPTIME: 99.98%</span>
             </div>
@@ -97,10 +109,11 @@ export default function CyberNavbar() {
                 <a
                   key={link.href}
                   href={link.href}
+                  onClick={() => sound.playClick()}
                   className={`px-3 py-1.5 rounded-lg transition-all duration-200 ${
                     isActive
                       ? "text-[#ff4d4d] bg-[#ff3333]/15 border border-[#ff3333]/40 shadow-[0_0_12px_rgba(255,51,51,0.25)] font-bold"
-                      : "text-gray-400 hover:text-white hover:bg-gray-900/60"
+                      : "text-neutral-400 hover:text-white hover:bg-neutral-900/60"
                   }`}
                 >
                   {link.label}
@@ -109,11 +122,28 @@ export default function CyberNavbar() {
             })}
           </nav>
 
-          {/* Right: Clock & Resume Uplink */}
+          {/* Right: Sound Toggle Button & Uplink */}
           <div className="hidden sm:flex items-center space-x-3 text-xs">
-            <span className="text-gray-400 text-[11px]">{sysTime}</span>
+            {/* Sound Toggle Effect Button */}
+            <button
+              type="button"
+              onClick={toggleSound}
+              title="Toggle Audio Feedback"
+              className={`px-2.5 py-1 rounded border text-[11px] font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
+                soundActive
+                  ? "bg-[#ff3333]/20 border-[#ff3333] text-[#ff4d4d] shadow-[0_0_10px_rgba(255,51,51,0.4)]"
+                  : "bg-neutral-900/80 border-neutral-800 text-neutral-400 hover:text-neutral-200"
+              }`}
+            >
+              <span>{soundActive ? "🔊" : "🔇"}</span>
+              <span>{soundActive ? "FX_ON" : "FX_OFF"}</span>
+            </button>
+
+            <span className="text-neutral-500 text-[11px] hidden xl:inline">{sysTime}</span>
+
             <a
               href="mailto:jadligaurav2082004@gmail.com"
+              onClick={() => sound.playClick(1000)}
               className="px-3 py-1 rounded bg-[#ff3333]/10 hover:bg-[#ff3333]/25 text-[#ff4d4d] border border-[#ff3333]/40 font-bold text-xs transition-all shadow-[0_0_10px_rgba(255,51,51,0.2)]"
             >
               [UPLINK]
@@ -121,14 +151,23 @@ export default function CyberNavbar() {
           </div>
 
           {/* Mobile Menu Hamburger */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-gray-400 hover:text-white focus:outline-none"
-            aria-label="Toggle Navigation Menu"
-          >
-            <span className="text-sm">{menuOpen ? "[✕]" : "[☰]"}</span>
-          </button>
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleSound}
+              className="p-1.5 rounded border border-neutral-800 text-xs text-neutral-300"
+            >
+              {soundActive ? "🔊" : "🔇"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 text-neutral-400 hover:text-white focus:outline-none"
+              aria-label="Toggle Navigation Menu"
+            >
+              <span className="text-sm">{menuOpen ? "[✕]" : "[☰]"}</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -139,13 +178,16 @@ export default function CyberNavbar() {
             <a
               key={link.href}
               href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className="block px-3 py-2 rounded text-xs text-gray-300 hover:text-[#ff4d4d] hover:bg-gray-900 font-bold"
+              onClick={() => {
+                sound.playClick();
+                setMenuOpen(false);
+              }}
+              className="block px-3 py-2 rounded text-xs text-neutral-300 hover:text-[#ff4d4d] hover:bg-neutral-900 font-bold"
             >
               {link.label}
             </a>
           ))}
-          <div className="pt-2 border-t border-gray-800 text-[11px] text-gray-500 flex justify-between items-center">
+          <div className="pt-2 border-t border-neutral-800 text-[11px] text-neutral-500 flex justify-between items-center">
             <span>{sysTime}</span>
             <span className="text-emerald-400">STATUS: OPERATIONAL</span>
           </div>

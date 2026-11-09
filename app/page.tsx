@@ -10,6 +10,7 @@ import CyberCertifications from "@/components/CyberCertifications";
 import CyberContact from "@/components/CyberContact";
 import CyberBackground from "@/components/CyberBackground";
 import InteractiveCursorFX from "@/components/InteractiveCursorFX";
+import InteractiveTerminalCLI from "@/components/InteractiveTerminalCLI";
 
 export default function Home() {
   return (
@@ -20,7 +21,7 @@ export default function Home() {
       {/* ─── Developer OS OLED Dark Atmospheric Background ─── */}
       <CyberBackground />
 
-      {/* ─── Top Telemetry OS Navigation Bar ─── */}
+      {/* ─── Top Telemetry OS Navigation Bar with Sound Toggle ─── */}
       <CyberNavbar />
 
       {/* ─── Core Futuristic Developer OS Sections ─── */}
@@ -38,6 +39,9 @@ export default function Home() {
         <CyberCertifications />
         <CyberContact />
       </div>
+
+      {/* ─── Interactive Terminal CLI Command Bar (Floating / Docked) ─── */}
+      <InteractiveTerminalCLI />
     </main>
   );
 }

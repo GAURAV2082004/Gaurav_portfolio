@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import CyberBoxAgent from "./CyberBoxAgent";
 import DraggableWindow from "./DraggableWindow";
+import { sound } from "@/lib/audio";
 
 const ROLES = [
   "Software Developer // Systems & AI Automation",
@@ -70,18 +71,18 @@ export default function CyberHero() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative z-10">
         {/* Top OS Telemetry Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 px-4 py-2.5 rounded-lg bg-[#0a0a0a]/80 border border-[#ff3333]/25 backdrop-blur-md text-[11px] font-mono text-gray-400">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 px-4 py-2.5 rounded-lg bg-[#0a0a0a]/80 border border-[#ff3333]/25 backdrop-blur-md text-[11px] font-mono text-neutral-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse" />
             <span className="text-[#ff4d4d] font-bold">GAURAV-JADLI.DEV</span>
-            <span className="text-gray-700">//</span>
+            <span className="text-neutral-700">//</span>
             <span>KERNEL: v4.2_RELEASE</span>
           </div>
-          <div className="flex items-center gap-4 text-gray-400">
+          <div className="flex items-center gap-4 text-neutral-400">
             <span className="hidden sm:inline">ARCH: X86_64_AI</span>
-            <span className="hidden md:inline text-gray-700">//</span>
+            <span className="hidden md:inline text-neutral-700">//</span>
             <span className="text-emerald-400 font-bold">STATUS: OPERATIONAL</span>
-            <span className="text-gray-700">//</span>
+            <span className="text-neutral-700">//</span>
             <span className="text-[#ff4d4d] font-bold">SYS_LATENCY: 18ms</span>
           </div>
         </div>
@@ -106,14 +107,14 @@ export default function CyberHero() {
 
             {/* Terminal Typing Line */}
             <div className="h-12 flex items-center font-mono">
-              <div className="text-sm sm:text-base text-gray-200 flex items-center gap-2 bg-[#0a0a0a]/90 px-4 py-2.5 rounded-lg border border-[#ff3333]/30 w-full overflow-hidden shadow-inner">
+              <div className="text-sm sm:text-base text-neutral-200 flex items-center gap-2 bg-[#0a0a0a]/90 px-4 py-2.5 rounded-lg border border-[#ff3333]/30 w-full overflow-hidden shadow-inner">
                 <span className="text-[#ff3333] flex-shrink-0">&gt;</span>
                 <span className="truncate">{displayedRole}</span>
                 <span className="w-2 h-4 bg-[#ff3333] animate-typing-cursor inline-block flex-shrink-0" />
               </div>
             </div>
 
-            <p className="text-gray-300 text-base sm:text-lg leading-relaxed max-w-2xl font-sans">
+            <p className="text-neutral-300 text-base sm:text-lg leading-relaxed max-w-2xl font-sans">
               Computer Engineering student at{" "}
               <span className="text-[#ff4d4d] font-medium">Pillai College of Engineering, University of Mumbai</span>{" "}
               (Graduating 2026). Specializing in high-throughput automation pipelines, autonomous scraping engines
@@ -124,6 +125,7 @@ export default function CyberHero() {
             <div className="flex flex-wrap items-center gap-4 pt-2 font-mono">
               <a
                 href="#projects"
+                onClick={() => sound.playClick(1000)}
                 className="btn-cyber px-6 py-3.5 bg-[#ff3333] hover:bg-[#ff1a1a] text-black font-extrabold text-sm tracking-wider flex items-center gap-2 shadow-[0_0_25px_rgba(255,51,51,0.4)] hover:shadow-[0_0_35px_rgba(255,51,51,0.6)] transition-all cursor-pointer"
               >
                 <span>[▶ VIEW_PROJECTS()]</span>
@@ -131,7 +133,8 @@ export default function CyberHero() {
 
               <a
                 href="#contact"
-                className="btn-cyber px-6 py-3.5 bg-gray-950/90 hover:bg-gray-900 text-[#ff4d4d] border border-[#ff3333]/50 hover:border-[#ff3333] font-bold text-sm tracking-wider flex items-center gap-2 transition-all cursor-pointer"
+                onClick={() => sound.playClick(900)}
+                className="btn-cyber px-6 py-3.5 bg-neutral-950/90 hover:bg-neutral-900 text-[#ff4d4d] border border-[#ff3333]/50 hover:border-[#ff3333] font-bold text-sm tracking-wider flex items-center gap-2 transition-all cursor-pointer"
               >
                 <span>[&gt;_ INITIALIZE_CONTACT]</span>
               </a>
@@ -140,7 +143,8 @@ export default function CyberHero() {
                 href="https://github.com/GAURAV2082004"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-3.5 text-xs text-gray-400 hover:text-white border border-gray-800 hover:border-[#ff3333]/40 rounded-lg transition-colors flex items-center gap-2 bg-[#0a0a0a]/60"
+                onClick={() => sound.playClick()}
+                className="px-4 py-3.5 text-xs text-neutral-400 hover:text-white border border-neutral-800 hover:border-[#ff3333]/40 rounded-lg transition-colors flex items-center gap-2 bg-[#0a0a0a]/60"
               >
                 <span>🐙 GITHUB_REPO ↗</span>
               </a>
@@ -149,7 +153,8 @@ export default function CyberHero() {
                 href="https://linkedin.com/in/gaurav-jadli-00a892289"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-3.5 text-xs text-gray-400 hover:text-white border border-gray-800 hover:border-[#ff3333]/40 rounded-lg transition-colors flex items-center gap-2 bg-[#0a0a0a]/60"
+                onClick={() => sound.playClick()}
+                className="px-4 py-3.5 text-xs text-neutral-400 hover:text-white border border-neutral-800 hover:border-[#ff3333]/40 rounded-lg transition-colors flex items-center gap-2 bg-[#0a0a0a]/60"
               >
                 <span>💼 LINKEDIN ↗</span>
               </a>
@@ -202,7 +207,7 @@ export default function CyberHero() {
 
               {/* Console Body */}
               <div className="p-4 sm:p-5 font-mono text-xs space-y-3 bg-[#050505]/95 min-h-[220px]">
-                <div className="text-gray-500 text-[11px] pb-2 border-b border-gray-800/80 flex items-center justify-between">
+                <div className="text-neutral-500 text-[11px] pb-2 border-b border-neutral-800/80 flex items-center justify-between">
                   <span>// Multi-Agent Execution Node (Target Sandbox)</span>
                   <span className="text-[#ff4d4d] text-[9px] animate-pulse">● DRAGGABLE WINDOW</span>
                 </div>
@@ -211,15 +216,15 @@ export default function CyberHero() {
                   {sandboxLog.map((log, i) => (
                     <div key={i} className="flex items-start gap-2">
                       <span className="text-[#ff3333] flex-shrink-0">&gt;</span>
-                      <span className="text-gray-300 leading-relaxed font-mono">{log}</span>
+                      <span className="text-neutral-300 leading-relaxed font-mono">{log}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Blinking input simulation line */}
-                <div className="pt-2 flex items-center gap-2 text-gray-200 border-t border-gray-900">
+                <div className="pt-2 flex items-center gap-2 text-neutral-200 border-t border-neutral-900">
                   <span className="text-[#ff3333]">&gt;</span>
-                  <span className="text-gray-400 text-[11px]">waiting for next agent packet...</span>
+                  <span className="text-neutral-400 text-[11px]">waiting for next agent packet...</span>
                   <span className="w-2 h-4 bg-[#ff3333] animate-pulse" />
                 </div>
               </div>
@@ -227,15 +232,15 @@ export default function CyberHero() {
               {/* Diagnostics Footer Bar */}
               <div className="grid grid-cols-3 gap-1 px-4 py-2.5 bg-[#0a0a0a] border-t border-[#ff3333]/20 text-center font-mono text-[10px]">
                 <div>
-                  <span className="text-gray-500">CPU LOAD: </span>
+                  <span className="text-neutral-500">CPU LOAD: </span>
                   <span className="text-[#ff4d4d] font-bold">14%</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">LATENCY: </span>
+                  <span className="text-neutral-500">LATENCY: </span>
                   <span className="text-emerald-400 font-bold">&lt; 180ms</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">UPTIME: </span>
+                  <span className="text-neutral-500">UPTIME: </span>
                   <span className="text-blue-400 font-bold">99.98%</span>
                 </div>
               </div>
@@ -253,10 +258,10 @@ export default function CyberHero() {
           ].map((item, i) => (
             <div
               key={i}
-              className="cyber-panel cyber-panel-hover p-4 sm:p-5 rounded-xl border border-[#ff3333]/20 transition-all duration-300"
+              className="cyber-panel cyber-panel-hover p-4 sm:p-5 rounded-xl border border-[#ff3333]/20 transition-all duration-300 bg-[#0a0a0a]"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">{item.label}</span>
+                <span className="text-xs text-neutral-500 uppercase tracking-wider">{item.label}</span>
                 <span className="text-lg">{item.icon}</span>
               </div>
               <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">

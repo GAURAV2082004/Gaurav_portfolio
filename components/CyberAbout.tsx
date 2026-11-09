@@ -2,6 +2,7 @@
 
 import ScrollReveal from "./ScrollReveal";
 import CyberBoxAgent from "./CyberBoxAgent";
+import { sound } from "@/lib/audio";
 
 const highlights = [
   { label: "Production Tools Built", value: "7+", sub: "PHP & Python in Prod", icon: "⚙️" },
@@ -29,7 +30,10 @@ export default function CyberAbout() {
           {/* Left Column: Interactive Terminal Manifest (6 cols) */}
           <div className="lg:col-span-6">
             <ScrollReveal direction="left">
-              <div className="cyber-panel rounded-2xl overflow-hidden corner-bracket border border-[#ff3333]/30 shadow-2xl relative">
+              <div
+                onClick={() => sound.playClick(850)}
+                className="cyber-panel rounded-2xl overflow-hidden corner-bracket border border-[#ff3333]/30 shadow-2xl relative cursor-pointer"
+              >
                 {/* Dedicated Box Agent Cursor for Manifest JSON */}
                 <CyberBoxAgent
                   agent={{

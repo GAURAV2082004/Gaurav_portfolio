@@ -4,12 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import ScrollReveal from "./ScrollReveal";
 import CyberProjectModal from "./CyberProjectModal";
+import CodeInspectorDrawer from "./CodeInspectorDrawer";
 import CyberBoxAgent from "./CyberBoxAgent";
 import { projects, type Project } from "@/data/projects";
+import { sound } from "@/lib/audio";
 
 export default function CyberProjects() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [inspectingProject, setInspectingProject] = useState<Project | null>(null);
   const [screenshotProject, setScreenshotProject] = useState<Project | null>(null);
 
   const categories = [
@@ -32,7 +35,7 @@ export default function CyberProjects() {
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-[#ff3333] text-sm font-bold">[03]</span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  // PRODUCTION_PROJECTS_BENTO_GRID
+                  // BENTO_GRID_PRODUCTION_PROJECTS
                 </h2>
               </div>
               <p className="text-neutral-400 text-xs sm:text-sm font-sans ml-8 max-w-xl">
@@ -46,7 +49,10 @@ export default function CyberProjects() {
                 <button
                   key={cat.value}
                   type="button"
-                  onClick={() => setActiveCategory(cat.value)}
+                  onClick={() => {
+                    sound.playClick(750);
+                    setActiveCategory(cat.value);
+                  }}
                   className={`text-xs font-mono px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                     activeCategory === cat.value
                       ? "bg-[#ff3333] text-white font-bold shadow-[0_0_14px_rgba(255,51,51,0.5)]"
@@ -106,7 +112,10 @@ export default function CyberProjects() {
 
                 {/* Project Image Preview with Cyber Scanlines */}
                 <div
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => {
+                    sound.playClick(900);
+                    setSelectedProject(project);
+                  }}
                   className="relative h-48 sm:h-52 w-full bg-neutral-950 border-b border-neutral-800 cursor-pointer overflow-hidden"
                 >
                   <Image
@@ -149,7 +158,10 @@ export default function CyberProjects() {
                   {/* Title & Tagline */}
                   <div>
                     <h3
-                      onClick={() => setSelectedProject(project)}
+                      onClick={() => {
+                        sound.playClick(900);
+                        setSelectedProject(project);
+                      }}
                       className="text-lg font-bold text-white group-hover:text-[#ff4d4d] transition-colors cursor-pointer"
                     >
                       {project.title}
@@ -192,19 +204,26 @@ export default function CyberProjects() {
                     )}
                   </div>
 
-                  {/* Action Buttons */}
+                  {/* Action Buttons: Case Study + Slide-in Code Inspector */}
                   <div className="pt-3 mt-auto border-t border-neutral-800/80 flex items-center justify-between gap-2 font-mono text-xs">
                     <button
                       type="button"
-                      onClick={() => setScreenshotProject(project)}
-                      className="text-[11px] text-neutral-400 hover:text-[#ff4d4d] transition-colors cursor-pointer"
+                      onClick={() => {
+                        sound.playBeep();
+                        setInspectingProject(project);
+                      }}
+                      className="text-[11px] text-[#ff4d4d] hover:text-white bg-[#ff3333]/10 hover:bg-[#ff3333]/25 px-2.5 py-1 rounded border border-[#ff3333]/30 transition-all cursor-pointer flex items-center gap-1"
                     >
-                      🔍 High-Res View
+                      <span>{`{ }`}</span>
+                      <span>INSPECT_JSON</span>
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => setSelectedProject(project)}
+                      onClick={() => {
+                        sound.playClick(1000);
+                        setSelectedProject(project);
+                      }}
                       className="btn-cyber px-3.5 py-1.5 bg-[#ff3333] hover:bg-[#ff1a1a] text-white font-bold transition-all text-xs cursor-pointer shadow-[0_0_12px_rgba(255,51,51,0.3)]"
                     >
                       [▶ CASE_STUDY]
@@ -216,6 +235,12 @@ export default function CyberProjects() {
           ))}
         </div>
       </div>
+
+      {/* Slide-in Code Inspector Drawer */}
+      <CodeInspectorDrawer
+        project={inspectingProject}
+        onClose={() => setInspectingProject(null)}
+      />
 
       {/* Deep-Dive Case Study Modal */}
       {selectedProject && (
