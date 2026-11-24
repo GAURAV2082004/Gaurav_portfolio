@@ -73,27 +73,52 @@ export default function CyberHero() {
             PORTFOLIO
           </div>
 
-          <div ref={photoRef} className="hero-photo" id="heroPhoto">
-            <div className="ph" style={{ color: "var(--mute)" }}>
-              <svg viewBox="0 0 200 240" fill="currentColor" aria-hidden="true">
-                <circle cx="100" cy="78" r="44" />
-                <path d="M14 240c0-58 38-92 86-92s86 34 86 92z" />
-              </svg>
+          <LiveBuild id="hero-photo" isGraphic>
+            <div ref={photoRef} className="hero-photo" id="heroPhoto">
+              <img
+                src="/gaurav.jpg"
+                alt="Gaurav Jadli — Software Developer & AI Automation Engineer"
+                width={768}
+                height={1024}
+                loading="eager"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center top",
+                  filter: "contrast(1.04) brightness(0.96)",
+                }}
+              />
+              {/* Bottom vignette gradient */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(180deg, transparent 65%, rgba(7,6,10,0.85) 100%)",
+                  pointerEvents: "none",
+                }}
+              />
               <span
                 style={{
                   fontFamily: "var(--mono)",
-                  fontSize: 11,
-                  letterSpacing: "0.18em",
-                  color: "var(--mute)",
+                  fontSize: 10,
+                  letterSpacing: "0.2em",
+                  color: "#fff",
+                  background: "rgba(7,6,10,0.7)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  backdropFilter: "blur(8px)",
+                  padding: "4px 9px",
                   position: "absolute",
-                  top: 14,
-                  left: 14,
+                  top: 12,
+                  left: 12,
+                  borderRadius: 3,
+                  textTransform: "uppercase",
                 }}
               >
-                GAURAV JADLI
+                GAURAV JADLI // MUMBAI
               </span>
             </div>
-          </div>
+          </LiveBuild>
         </div>
 
         {/* Hero meta: name + pitch */}
