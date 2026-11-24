@@ -225,9 +225,9 @@ section[id] { scroll-margin-top: 72px; }
 .pre { opacity: 0; }
 .fillin { animation: wipe .85s cubic-bezier(.3,.7,.2,1) both; }
 @keyframes wipe { from { clip-path: inset(-80px 100% -80px -80px); opacity: .3; } to { clip-path: inset(-80px -80px -80px -80px); opacity: 1; } }
-i.ch { display: inline; font-style: inherit; opacity: 0; }
-i.ch.on { opacity: 1; }
-i.ch.caret { box-shadow: calc(1px + .04em) 0 0 var(--accent-2); }
+i.ch, span.ch { display: inline; font-style: inherit; opacity: 0; }
+i.ch.on, span.ch.on { opacity: 1; }
+i.ch.caret, span.ch.caret { box-shadow: calc(1px + .04em) 0 0 var(--accent-2); }
 .shellin { animation: shellin .4s ease both; }
 @keyframes shellin { from { opacity: 0; } to { opacity: 1; } }
 

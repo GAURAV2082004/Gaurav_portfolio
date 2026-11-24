@@ -11,20 +11,27 @@ import CyberContact from "@/components/CyberContact";
 import CyberBackground from "@/components/CyberBackground";
 import InteractiveTerminalCLI from "@/components/InteractiveTerminalCLI";
 import IntroLoader from "@/components/IntroLoader";
-import MultiplayerCursors from "@/components/MultiplayerCursors";
+import CursorLayer from "@/components/CursorLayer";
+import LiveBuild from "@/components/LiveBuild";
+import Typed from "@/components/Typed";
 
 export default function Home() {
   return (
     <>
-      {/* ─── Intro loader (particle orb + GJ initials, fades at 2.3s) ─── */}
+      {/* ─── Intro loader (particle orb + GJ initials, auto-dismisses at 2.3s) ─── */}
       <IntroLoader />
 
-      {/* ─── Multiplayer cursors + live build-in effect ─── */}
-      <MultiplayerCursors />
+      {/* ─── Unified Multi-Cursor Layer across ALL sections ─── */}
+      <CursorLayer />
 
-      {/* ─── Main page (position:relative for cursor layer) ─── */}
+      {/* ─── Main page (relative positioning for cursor coordinates) ─── */}
       <main
-        style={{ position: "relative", background: "var(--bg)", color: "var(--fg)", overflowX: "hidden" }}
+        style={{
+          position: "relative",
+          background: "var(--bg)",
+          color: "var(--fg)",
+          overflowX: "hidden",
+        }}
       >
         {/* ─── Subtle canvas particle background ─── */}
         <CyberBackground />
@@ -44,10 +51,14 @@ export default function Home() {
           {/* ─── Quote block ─── */}
           <section className="pad quote-wrap">
             <div className="wrap" style={{ display: "grid", placeItems: "center" }}>
-              <blockquote className="quote rv">
-                <q>Ship things that work. Then make them fast. Then make them beautiful.</q>
-                <cite>— Gaurav Jadli</cite>
-              </blockquote>
+              <LiveBuild id="quote-banner">
+                <blockquote className="quote">
+                  <q>
+                    <Typed>Ship things that work. Then make them fast. Then make them beautiful.</Typed>
+                  </q>
+                  <cite>— Gaurav Jadli</cite>
+                </blockquote>
+              </LiveBuild>
             </div>
           </section>
 

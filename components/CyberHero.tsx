@@ -4,13 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import DraggableWindow from "./DraggableWindow";
 import CyberBoxAgent from "./CyberBoxAgent";
 import { sound } from "@/lib/audio";
+import { HERO_COUNTER_STATS } from "@/data/stats";
+import LiveBuild from "./LiveBuild";
+import Typed from "./Typed";
 
 export default function CyberHero() {
   const stageRef = useRef<HTMLDivElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
   const [sandboxLog, setSandboxLog] = useState<string[]>([
-    "[KERNEL] System core v4.2 initialized in 14ms",
-    "[AGENT-01] DOM crawler active: 10,000+ SKUs indexed",
+    "[KERNEL] System core initialized in 14 ms",
+    "[AGENT-01] DOM crawler active: 10k+ SKUs indexed",
     "[AGENT-02] Uptime sentinel healthy: 200+ domains online",
   ]);
 
@@ -25,8 +28,8 @@ export default function CyberHero() {
       const r = stage.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width - 0.5;
       const y = (e.clientY - r.top) / r.height - 0.5;
-      photo.style.setProperty("--ry", x * 14 + "deg");
-      photo.style.setProperty("--rx", -y * 10 + "deg");
+      photo.style.setProperty("--ry", `${x * 14}deg`);
+      photo.style.setProperty("--rx", `${-y * 10}deg`);
     };
     const handleLeave = () => {
       photo.style.setProperty("--ry", "0deg");
@@ -43,14 +46,17 @@ export default function CyberHero() {
   // Live telemetry log stream
   useEffect(() => {
     const logs = [
-      "[DB:MYSQL] Query execution cached in 180ms",
+      "[DB:MYSQL] Query execution cached in 180 ms",
       "[AI:WHISPER] Audio stream parsed to structured JSON",
-      "[SCRAPER] 6-stage fallback parser reached 95.4% accuracy",
-      "[ERP:SYNC] 2-way Google Sheets webhook synchronized",
+      "[SCRAPER] 6-stage fallback parser reached 95% accuracy",
+      "[ERP:SYNC] Two-way Google Sheets webhook synchronized",
       "[SENTINEL] SSL cert countdown verified (284 days valid)",
     ];
     const interval = setInterval(() => {
-      setSandboxLog(prev => [...prev.slice(-3), logs[Math.floor(Math.random() * logs.length)]]);
+      setSandboxLog((prev) => [
+        ...prev.slice(-3),
+        logs[Math.floor(Math.random() * logs.length)],
+      ]);
     }, 4200);
     return () => clearInterval(interval);
   }, []);
@@ -61,59 +67,75 @@ export default function CyberHero() {
       <div className="grid-floor" aria-hidden="true" />
 
       <div className="wrap">
-        {/* ── Stage: hero-word + photo ── */}
+        {/* Stage: hero-word + photo */}
         <div ref={stageRef} className="stage" id="stage">
-          <div className="hero-word" aria-hidden="true">PORTFOLIO</div>
+          <div className="hero-word" aria-hidden="true">
+            PORTFOLIO
+          </div>
 
-          {/* Silhouette placeholder (no photo available) */}
           <div ref={photoRef} className="hero-photo" id="heroPhoto">
             <div className="ph" style={{ color: "var(--mute)" }}>
               <svg viewBox="0 0 200 240" fill="currentColor" aria-hidden="true">
                 <circle cx="100" cy="78" r="44" />
                 <path d="M14 240c0-58 38-92 86-92s86 34 86 92z" />
               </svg>
-              <span style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.18em", color: "var(--mute)", position: "absolute", top: 14, left: 14 }}>
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 11,
+                  letterSpacing: "0.18em",
+                  color: "var(--mute)",
+                  position: "absolute",
+                  top: 14,
+                  left: 14,
+                }}
+              >
                 GAURAV JADLI
               </span>
             </div>
           </div>
         </div>
 
-        {/* ── Hero meta: name + pitch ── */}
+        {/* Hero meta: name + pitch */}
         <div className="hero-meta">
           {/* Left: name */}
-          <div className="rv" style={{ "--d": "0s" } as React.CSSProperties}>
-            <p className="hello">Hello, I&apos;m</p>
+          <LiveBuild id="hero-name-block">
+            <p className="hello">
+              <Typed>Hello, I&apos;m</Typed>
+            </p>
             <h1 className="display hero-name">
-              <span>Gaurav</span>
-              <span className="r">Jadli</span>
+              <span>
+                <Typed>Gaurav</Typed>
+              </span>
+              <span className="r">
+                {" "}
+                <Typed>Jadli</Typed>
+              </span>
             </h1>
-            <span className="role-chip">Software Developer / AI & Automation Engineer</span>
-          </div>
+            <span className="role-chip">
+              <Typed>Software Developer / AI &amp; Automation Engineer</Typed>
+            </span>
+          </LiveBuild>
 
           {/* Right: status + pitch + stats */}
-          <div className="rv" style={{ "--d": "0.12s" } as React.CSSProperties}>
+          <LiveBuild id="hero-pitch-block">
             <p className="now">
               <i />
-              Open to opportunities · Mumbai, India
+              <Typed>Open to opportunities · Mumbai, India</Typed>
             </p>
             <p className="pitch">
-              Building autonomous scrapers, enterprise ERPs, and real-time monitoring tools.
-              Computer Engineering at Pillai College of Engineering, University of Mumbai.
+              <Typed>
+                Building autonomous scrapers, enterprise ERPs, and real-time monitoring tools. Computer
+                Engineering at Pillai College of Engineering, University of Mumbai.
+              </Typed>
             </p>
             <div className="stats">
-              <div className="stat">
-                <b>7+</b>
-                <span>Tools Built</span>
-              </div>
-              <div className="stat">
-                <b>10k+</b>
-                <span>SKUs Catalogued</span>
-              </div>
-              <div className="stat">
-                <b>200+</b>
-                <span>Domains Monitored</span>
-              </div>
+              {HERO_COUNTER_STATS.map((stat, i) => (
+                <div key={i} className="stat">
+                  <b>{stat.value}</b>
+                  <span>{stat.label}</span>
+                </div>
+              ))}
             </div>
 
             {/* Action buttons */}
@@ -122,7 +144,12 @@ export default function CyberHero() {
                 href="#projects"
                 onClick={() => sound.playClick(1000)}
                 className="btn"
-                style={{ fontSize: 14, padding: "12px 22px", fontFamily: "var(--mono)", letterSpacing: "0.1em" }}
+                style={{
+                  fontSize: 14,
+                  padding: "12px 22px",
+                  fontFamily: "var(--mono)",
+                  letterSpacing: "0.1em",
+                }}
               >
                 [▶ VIEW_PROJECTS]
               </a>
@@ -130,11 +157,18 @@ export default function CyberHero() {
                 href="#contact"
                 onClick={() => sound.playClick(900)}
                 style={{
-                  fontFamily: "var(--mono)", fontSize: 14, letterSpacing: "0.1em", padding: "12px 22px",
-                  border: "1px solid var(--accent)", color: "var(--accent-2)",
+                  fontFamily: "var(--mono)",
+                  fontSize: 14,
+                  letterSpacing: "0.1em",
+                  padding: "12px 22px",
+                  border: "1px solid var(--accent)",
+                  color: "var(--accent-2)",
                   background: "color-mix(in srgb, var(--accent) 10%, transparent)",
-                  textTransform: "uppercase", cursor: "pointer", transition: "all .2s",
-                  display: "inline-flex", alignItems: "center",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  transition: "all .2s",
+                  display: "inline-flex",
+                  alignItems: "center",
                 }}
               >
                 [&gt;_ INITIALIZE_CONTACT]
@@ -145,9 +179,13 @@ export default function CyberHero() {
                 rel="noopener noreferrer"
                 onClick={() => sound.playClick()}
                 style={{
-                  fontFamily: "var(--mono)", fontSize: 12, padding: "12px 16px",
-                  border: "1px solid var(--line)", color: "var(--mute)",
-                  background: "var(--panel)", transition: "all .2s",
+                  fontFamily: "var(--mono)",
+                  fontSize: 12,
+                  padding: "12px 16px",
+                  border: "1px solid var(--line)",
+                  color: "var(--mute)",
+                  background: "var(--panel)",
+                  transition: "all .2s",
                 }}
               >
                 GITHUB ↗
@@ -158,30 +196,74 @@ export default function CyberHero() {
                 rel="noopener noreferrer"
                 onClick={() => sound.playClick()}
                 style={{
-                  fontFamily: "var(--mono)", fontSize: 12, padding: "12px 16px",
-                  border: "1px solid var(--line)", color: "var(--mute)",
-                  background: "var(--panel)", transition: "all .2s",
+                  fontFamily: "var(--mono)",
+                  fontSize: 12,
+                  padding: "12px 16px",
+                  border: "1px solid var(--line)",
+                  color: "var(--mute)",
+                  background: "var(--panel)",
+                  transition: "all .2s",
                 }}
               >
                 LINKEDIN ↗
               </a>
             </div>
-          </div>
+          </LiveBuild>
         </div>
 
-        {/* ── Live agent terminal (optional draggable) ── */}
-        <div style={{ marginTop: 48 }} className="rv" >
+        {/* Live agent terminal */}
+        <LiveBuild id="hero-terminal-block" isGraphic className="mt-12">
           <DraggableWindow title="agent_orchestrator.sh" badge="LIVE TELEMETRY">
             <CyberBoxAgent
               agent={{ id: "agent-01", name: "Agent 01", role: "Scraper", color: "#ff1f2d" }}
               waypoints={[
-                { xPercent: 18, yPercent: 70, action: "type", targetLabel: "COMMAND_BUFFER", statusText: "Injecting DOM crawler...", typeText: "python3 scrape.py --skus=10482", pause: 2600 },
-                { xPercent: 42, yPercent: 36, action: "highlight", targetLabel: "LOG_STREAM", statusText: "Auditing: 10,000+ SKUs", pause: 2200 },
-                { xPercent: 68, yPercent: 88, action: "click", targetLabel: "UPTIME_METRIC", statusText: "Pinging: 99.98% uptime", pause: 2000 },
+                {
+                  xPercent: 18,
+                  yPercent: 70,
+                  action: "type",
+                  targetLabel: "COMMAND_BUFFER",
+                  statusText: "Injecting DOM crawler queue...",
+                  typeText: "python3 scrape.py --skus=10482",
+                  pause: 2600,
+                },
+                {
+                  xPercent: 42,
+                  yPercent: 36,
+                  action: "highlight",
+                  targetLabel: "LOG_STREAM",
+                  statusText: "Auditing: 10k+ SKUs parsed",
+                  pause: 2200,
+                },
+                {
+                  xPercent: 68,
+                  yPercent: 88,
+                  action: "click",
+                  targetLabel: "UPTIME_METRIC",
+                  statusText: "Pinging benchmark: 99.98%",
+                  pause: 2000,
+                },
               ]}
             />
-            <div style={{ padding: "16px 20px", fontFamily: "var(--mono)", fontSize: 12, background: "rgba(7,6,10,0.95)", minHeight: 220 }}>
-              <div style={{ color: "var(--mute)", fontSize: 11, paddingBottom: 8, borderBottom: "1px solid var(--line)", marginBottom: 12, display: "flex", justifyContent: "space-between" }}>
+            <div
+              style={{
+                padding: "16px 20px",
+                fontFamily: "var(--mono)",
+                fontSize: 12,
+                background: "rgba(7,6,10,0.95)",
+                minHeight: 220,
+              }}
+            >
+              <div
+                style={{
+                  color: "var(--mute)",
+                  fontSize: 11,
+                  paddingBottom: 8,
+                  borderBottom: "1px solid var(--line)",
+                  marginBottom: 12,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
                 <span>// Multi-Agent Execution Node</span>
                 <span style={{ color: "var(--accent-2)", fontSize: 10 }}>● LIVE</span>
               </div>
@@ -191,19 +273,58 @@ export default function CyberHero() {
                   <span style={{ color: "var(--fg)", lineHeight: 1.5 }}>{log}</span>
                 </div>
               ))}
-              <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--line)", display: "flex", alignItems: "center", gap: 8, color: "var(--mute)" }}>
+              <div
+                style={{
+                  marginTop: 12,
+                  paddingTop: 12,
+                  borderTop: "1px solid var(--line)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  color: "var(--mute)",
+                }}
+              >
                 <span style={{ color: "var(--accent)" }}>&gt;</span>
                 <span>waiting for next packet...</span>
-                <span style={{ width: 8, height: 16, background: "var(--accent)", display: "inline-block", animation: "pulse 1s infinite" }} />
+                <span
+                  style={{
+                    width: 8,
+                    height: 16,
+                    background: "var(--accent)",
+                    display: "inline-block",
+                    animation: "pulse 1s infinite",
+                  }}
+                />
               </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 4, padding: "10px 16px", background: "var(--bg-2)", borderTop: "1px solid var(--line)", fontFamily: "var(--mono)", fontSize: 10, textAlign: "center" }}>
-              <div><span style={{ color: "var(--mute)" }}>CPU: </span><span style={{ color: "var(--accent-2)" }}>14%</span></div>
-              <div><span style={{ color: "var(--mute)" }}>LATENCY: </span><span style={{ color: "#3dff8a" }}>&lt;180ms</span></div>
-              <div><span style={{ color: "var(--mute)" }}>UPTIME: </span><span style={{ color: "#3bd9ff" }}>99.98%</span></div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3,1fr)",
+                gap: 4,
+                padding: "10px 16px",
+                background: "var(--bg-2)",
+                borderTop: "1px solid var(--line)",
+                fontFamily: "var(--mono)",
+                fontSize: 10,
+                textAlign: "center",
+              }}
+            >
+              <div>
+                <span style={{ color: "var(--mute)" }}>CPU: </span>
+                <span style={{ color: "var(--accent-2)" }}>14%</span>
+              </div>
+              <div>
+                <span style={{ color: "var(--mute)" }}>LATENCY: </span>
+                <span style={{ color: "#3dff8a" }}>&lt; 180 ms</span>
+              </div>
+              <div>
+                <span style={{ color: "var(--mute)" }}>UPTIME: </span>
+                <span style={{ color: "#3bd9ff" }}>99.98%</span>
+              </div>
             </div>
           </DraggableWindow>
-        </div>
+        </LiveBuild>
       </div>
     </section>
   );

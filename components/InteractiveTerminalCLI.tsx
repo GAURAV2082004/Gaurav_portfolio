@@ -53,15 +53,16 @@ export default function InteractiveTerminalCLI() {
         newLogs.push({
           type: "output",
           text: `AVAILABLE COMMANDS:
-  help               - List all available OS commands
-  skills             - Inspect neural technology matrix & scroll to section
-  projects           - Query production systems & scroll to section
-  about              - Display developer profile & scroll to section
-  exp                - View enterprise experience logs & scroll to section
-  contact            - Launch direct transmission channels & scroll to section
-  status             - Output live system kernel telemetry
-  cat manifest.json  - Output raw system manifest payload
-  sudo [command]     - Execute command with elevated permissions
+  help               - List all available system commands
+  about              - Scroll to [01] About
+  exp / experience   - Scroll to [02] Experience
+  projects           - Scroll to [03] Projects
+  skills             - Scroll to [04] Skills
+  education          - Scroll to [05] Education
+  certifications     - Scroll to [06] Certifications
+  contact            - Scroll to [07] Contact
+  status             - Output live system status
+  cat manifest.json  - Output developer profile manifest
   clear              - Purge terminal buffer`,
         });
         break;
@@ -69,7 +70,7 @@ export default function InteractiveTerminalCLI() {
       case "skills":
         newLogs.push({
           type: "output",
-          text: "[ROUTER] Navigating to Neural Technology Matrix...",
+          text: "[ROUTER] Navigating to [04] Skills...",
         });
         document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" });
         break;
@@ -77,7 +78,7 @@ export default function InteractiveTerminalCLI() {
       case "projects":
         newLogs.push({
           type: "output",
-          text: "[ROUTER] Loading Bento-Grid Production Systems (5 verified projects)...",
+          text: "[ROUTER] Navigating to [03] Projects...",
         });
         document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
         break;
@@ -85,7 +86,7 @@ export default function InteractiveTerminalCLI() {
       case "about":
         newLogs.push({
           type: "output",
-          text: "[ROUTER] Navigating to Developer Specification Manifest...",
+          text: "[ROUTER] Navigating to [01] About...",
         });
         document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
         break;
@@ -94,15 +95,31 @@ export default function InteractiveTerminalCLI() {
       case "experience":
         newLogs.push({
           type: "output",
-          text: "[ROUTER] Inspecting Blank Analytica SWE Intern timeline logs...",
+          text: "[ROUTER] Navigating to [02] Experience...",
         });
         document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
+        break;
+
+      case "education":
+        newLogs.push({
+          type: "output",
+          text: "[ROUTER] Navigating to [05] Education...",
+        });
+        document.getElementById("education")?.scrollIntoView({ behavior: "smooth" });
+        break;
+
+      case "certifications":
+        newLogs.push({
+          type: "output",
+          text: "[ROUTER] Navigating to [06] Certifications...",
+        });
+        document.getElementById("certifications")?.scrollIntoView({ behavior: "smooth" });
         break;
 
       case "contact":
         newLogs.push({
           type: "output",
-          text: "[UPLINK] Direct channel: jadligaurav2082004@gmail.com | Mumbai, India",
+          text: "[ROUTER] Navigating to [07] Contact (jadligaurav2082004@gmail.com)...",
         });
         document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
         break;

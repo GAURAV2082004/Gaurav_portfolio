@@ -3,37 +3,38 @@
 import { useState, useEffect } from "react";
 import { sound } from "@/lib/audio";
 
-const SECTIONS = [
-  { id: "home",        label: "Home" },
-  { id: "about",       label: "About" },
-  { id: "experience",  label: "Exp" },
-  { id: "projects",    label: "Projects" },
-  { id: "skills",      label: "Skills" },
-  { id: "contact",     label: "Contact" },
+export const NAV_SECTIONS = [
+  { id: "about", label: "[01] About" },
+  { id: "experience", label: "[02] Experience" },
+  { id: "projects", label: "[03] Projects" },
+  { id: "skills", label: "[04] Skills" },
+  { id: "education", label: "[05] Education" },
+  { id: "certifications", label: "[06] Certifications" },
+  { id: "contact", label: "[07] Contact" },
 ];
 
 export default function CyberNavbar() {
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState("about");
   const [soundOn, setSoundOn] = useState(false);
 
   // Scroll-spy
   useEffect(() => {
     const spy = new IntersectionObserver(
-      entries => {
-        entries.forEach(en => {
+      (entries) => {
+        entries.forEach((en) => {
           if (en.isIntersecting) setActive(en.target.id);
         });
       },
-      { rootMargin: "-45% 0px -50% 0px" }
+      { rootMargin: "-30% 0px -40% 0px" }
     );
-    SECTIONS.forEach(({ id }) => {
+    NAV_SECTIONS.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) spy.observe(el);
     });
     return () => spy.disconnect();
   }, []);
 
-  // Scroll-progress bar
+  // Scroll progress bar
   useEffect(() => {
     const bar = document.getElementById("progress-bar");
     if (!bar) return;
@@ -47,7 +48,7 @@ export default function CyberNavbar() {
   }, []);
 
   const toggleSound = () => {
-    setSoundOn(prev => {
+    setSoundOn((prev) => {
       sound.enabled = !prev;
       if (!prev) sound.playClick(1200);
       return !prev;
@@ -58,8 +59,10 @@ export default function CyberNavbar() {
     <>
       {/* Pill Nav */}
       <nav className="nav" id="nav" aria-label="Sections">
-        <span className="dot" aria-hidden="true" />
-        {SECTIONS.map(({ id, label }) => (
+        <a href="#home" className="flex items-center" aria-label="Home">
+          <span className="dot" aria-hidden="true" />
+        </a>
+        {NAV_SECTIONS.map(({ id, label }) => (
           <a
             key={id}
             href={`#${id}`}
@@ -70,17 +73,23 @@ export default function CyberNavbar() {
             {label}
           </a>
         ))}
-        {/* Sound toggle */}
+        {/* Sound toggle button */}
         <button
+          type="button"
           onClick={toggleSound}
           aria-label={soundOn ? "Mute sounds" : "Enable sounds"}
           style={{
-            fontFamily: "var(--mono)", fontSize: 10, padding: "6px 12px",
-            borderRadius: 999, border: "1px solid var(--line)",
+            fontFamily: "var(--mono)",
+            fontSize: 10,
+            padding: "6px 12px",
+            borderRadius: 999,
+            border: "1px solid var(--line)",
             background: soundOn ? "var(--accent)" : "transparent",
             color: soundOn ? "#fff" : "var(--mute)",
-            cursor: "pointer", whiteSpace: "nowrap",
-            transition: "all .2s", marginLeft: 4,
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+            transition: "all .2s",
+            marginLeft: 4,
           }}
         >
           {soundOn ? "🔊 FX" : "🔇 FX"}
@@ -92,7 +101,17 @@ export default function CyberNavbar() {
         id="progress-bar"
         className="progress"
         aria-hidden="true"
-        style={{ position: "fixed", left: 0, bottom: 0, height: 3, width: "100%", transformOrigin: "0 50%", transform: "scaleX(0)", zIndex: 60, background: "linear-gradient(90deg,var(--accent-deep),var(--accent),#ff4fa3)" }}
+        style={{
+          position: "fixed",
+          left: 0,
+          bottom: 0,
+          height: 3,
+          width: "100%",
+          transformOrigin: "0 50%",
+          transform: "scaleX(0)",
+          zIndex: 60,
+          background: "linear-gradient(90deg,var(--accent-deep),var(--accent),#ff4fa3)",
+        }}
       />
     </>
   );

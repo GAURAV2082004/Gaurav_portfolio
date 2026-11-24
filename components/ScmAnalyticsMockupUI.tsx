@@ -30,13 +30,13 @@ export default function ScmAnalyticsMockupUI() {
             {/* Brand Header */}
             <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
               <div className="w-8 h-8 rounded-lg bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-sm shadow-md">
-                WB
+                RO
               </div>
               <div>
                 <h4 className="text-xs font-black text-white tracking-tight leading-tight">
-                  Wacky Brandhub
+                  Retail Operations
                 </h4>
-                <p className="text-[10px] text-emerald-400 font-mono font-semibold">BrandHubOS ERP</p>
+                <p className="text-[10px] text-emerald-400 font-mono font-semibold">Enterprise ERP</p>
               </div>
             </div>
 
