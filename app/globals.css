@@ -294,9 +294,17 @@ i.ch.caret, span.ch.caret { box-shadow: calc(1px + .04em) 0 0 var(--accent-2); }
   -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
   mask-image: linear-gradient(to bottom, #000 78%, transparent);
 }
-.hero-photo.cutout { background: none; border: 0; box-shadow: none; overflow: visible; filter: drop-shadow(0 20px 50px rgba(0,0,0,.6)); }
+.hero-photo.cutout {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+  filter: drop-shadow(0 24px 50px rgba(0,0,0,.8)) drop-shadow(0 0 35px rgba(255,31,45,0.22));
+  -webkit-mask-image: none;
+  mask-image: none;
+}
 .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-.hero-photo.cutout img { object-fit: contain; object-position: bottom; }
+.hero-photo.cutout img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; }
 .ph { width: 100%; height: 100%; display: grid; place-items: end center; position: relative; }
 .ph svg { width: 82%; height: auto; opacity: .5; }
 .ph span { position: absolute; top: 14px; left: 14px; font: 500 11px var(--mono); letter-spacing: .18em; color: var(--mute); }

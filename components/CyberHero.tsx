@@ -5,6 +5,7 @@ import DraggableWindow from "./DraggableWindow";
 import CyberBoxAgent from "./CyberBoxAgent";
 import { sound } from "@/lib/audio";
 import { HERO_COUNTER_STATS } from "@/data/stats";
+import { cursorQueue } from "@/lib/cursorQueue";
 import LiveBuild from "./LiveBuild";
 import Typed from "./Typed";
 
@@ -22,6 +23,10 @@ export default function CyberHero() {
     const stage = stageRef.current;
     const photo = photoRef.current;
     if (!stage || !photo) return;
+
+    // Register hero photo with cursor build queue
+    cursorQueue.registerBlock(photo, { id: "hero-photo", isGraphic: true });
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const handleMove = (e: PointerEvent) => {
@@ -73,52 +78,21 @@ export default function CyberHero() {
             PORTFOLIO
           </div>
 
-          <LiveBuild id="hero-photo" isGraphic>
-            <div ref={photoRef} className="hero-photo" id="heroPhoto">
-              <img
-                src="/gaurav.jpg"
-                alt="Gaurav Jadli — Software Developer & AI Automation Engineer"
-                width={768}
-                height={1024}
-                loading="eager"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "center top",
-                  filter: "contrast(1.04) brightness(0.96)",
-                }}
-              />
-              {/* Bottom vignette gradient */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(180deg, transparent 65%, rgba(7,6,10,0.85) 100%)",
-                  pointerEvents: "none",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 10,
-                  letterSpacing: "0.2em",
-                  color: "#fff",
-                  background: "rgba(7,6,10,0.7)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  backdropFilter: "blur(8px)",
-                  padding: "4px 9px",
-                  position: "absolute",
-                  top: 12,
-                  left: 12,
-                  borderRadius: 3,
-                  textTransform: "uppercase",
-                }}
-              >
-                GAURAV JADLI // MUMBAI
-              </span>
-            </div>
-          </LiveBuild>
+          <div
+            ref={photoRef}
+            className="hero-photo cutout live-build-target pre"
+            id="heroPhoto"
+            data-live-build="hero-photo"
+            data-is-graphic="true"
+          >
+            <img
+              src="/gaurav-cutout.png"
+              alt="Gaurav Jadli — Software Developer & AI Automation Engineer"
+              width={768}
+              height={1024}
+              loading="eager"
+            />
+          </div>
         </div>
 
         {/* Hero meta: name + pitch */}
