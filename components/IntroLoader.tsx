@@ -98,10 +98,15 @@ export default function IntroLoader() {
     draw();
     loop();
 
-    const hideTimer = setTimeout(() => {
+    const hideIntro = () => {
       setGone(true);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("introDismissed"));
+      }
       setTimeout(() => setRemoved(true), 900);
-    }, 2300);
+    };
+
+    const hideTimer = setTimeout(hideIntro, 2300);
 
     const handleResize = () => { size(); };
     window.addEventListener("resize", handleResize);
@@ -121,7 +126,13 @@ export default function IntroLoader() {
       id="intro"
       aria-hidden="true"
       className={gone ? "gone" : ""}
-      onClick={() => { setGone(true); setTimeout(() => setRemoved(true), 900); }}
+      onClick={() => {
+        setGone(true);
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("introDismissed"));
+        }
+        setTimeout(() => setRemoved(true), 900);
+      }}
     >
       <canvas ref={canvasRef} id="introOrb" />
       <div className="mono-init" id="introInit">GJ</div>

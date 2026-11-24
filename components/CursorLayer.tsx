@@ -10,6 +10,8 @@ const CURSOR_CONFIGS = [
   { name: "You", color: "#ff6bd0" },
 ];
 
+const SKIP_TAGS = "svg,canvas,script,style,textarea,select,option,input,button";
+
 export default function CursorLayer() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +34,8 @@ export default function CursorLayer() {
     }
 
     function roam(el: HTMLElement, instant = false) {
-      const x = rnd(24, Math.max(100, window.innerWidth - 160));
+      const maxX = Math.max(100, window.innerWidth - 160);
+      const x = rnd(24, maxX);
       const y = window.scrollY + rnd(90, Math.max(160, window.innerHeight - 100));
       place(el, x, y, 2.6, instant);
     }
@@ -43,7 +46,7 @@ export default function CursorLayer() {
     }
 
     // Drag out an empty Figma-style selection box
-    async function dragBox(cur: HTMLElement, x: number, y: number, w: number, h: number) {
+    async function dragBox(cur: HTMLElement, x: number, y: number, w: number, h: number): Promise<HTMLElement> {
       const box = document.createElement("div");
       box.className = "sel";
       box.setAttribute("aria-hidden", "true");
@@ -60,9 +63,10 @@ export default function CursorLayer() {
       place(cur, x + w, y + h, 0.75);
 
       const startTime = performance.now();
+      const dur = 750;
       const interval = setInterval(() => {
         const elapsed = performance.now() - startTime;
-        const p = Math.min(1, elapsed / 750);
+        const p = Math.min(1, elapsed / dur);
         label.textContent = `${Math.round(w * p)} × ${Math.round(h * p)}`;
       }, 40);
 
@@ -80,7 +84,7 @@ export default function CursorLayer() {
     }
 
     function findFreeSpot(rect: DOMRect): [number, number] {
-      for (let k = 0; k < 10; k++) {
+      for (let k = 0; k < 12; k++) {
         const x = rnd(24, Math.max(100, window.innerWidth - 160));
         const y = rnd(80, Math.max(140, window.innerHeight - 80));
         if (
@@ -95,21 +99,74 @@ export default function CursorLayer() {
       return [24, window.scrollY + 120];
     }
 
+    // Split text nodes into character spans if block has no pre-rendered spans
+    function splitChars(root: HTMLElement): HTMLElement[] {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: (n) =>
+          n.nodeValue?.trim() && !n.parentElement?.closest(SKIP_TAGS)
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_REJECT,
+      });
+
+      const textNodes: Node[] = [];
+      while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+      }
+
+      const chars: HTMLElement[] = [];
+      textNodes.forEach((node) => {
+        const val = node.nodeValue || "";
+        const frag = document.createDocumentFragment();
+        for (const ch of val) {
+          if (/\s/.test(ch)) {
+            frag.appendChild(document.createTextNode(ch));
+          } else {
+            const span = document.createElement("span");
+            span.className = "ch";
+            span.textContent = ch;
+            frag.appendChild(span);
+            chars.push(span);
+          }
+        }
+        node.parentNode?.replaceChild(frag, node);
+      });
+
+      return chars;
+    }
+
     // Reveal typed text or sweep graphics
-    async function revealContent(cur: HTMLElement, job: BuildJob) {
-      job.onStart?.();
-      const el = job.element;
-      const chars = Array.from(el.querySelectorAll<HTMLElement>('[data-typed-char="true"]'));
+    async function fillContent(cur: HTMLElement, el: HTMLElement, isGraphic?: boolean) {
+      let chars = Array.from(el.querySelectorAll<HTMLElement>('[data-typed-char="true"], .ch'));
 
+      if (chars.length === 0 && !isGraphic) {
+        chars = splitChars(el);
+      }
+
+      const R = () => el.getBoundingClientRect();
+
+      // Step cursor into first character position or graphic start
       if (chars.length > 0) {
-        // Step cursor into first character position
-        const firstPos = chars[0].getBoundingClientRect();
-        place(cur, firstPos.left + window.scrollX, firstPos.top + window.scrollY + 4, 0.45);
-        await wait(450);
+        const q = chars[0].getBoundingClientRect();
+        place(cur, q.left + window.scrollX, q.top + window.scrollY + q.height * 0.62, 0.5);
+      } else {
+        const r = R();
+        place(cur, r.left + window.scrollX + r.width * 0.1, r.top + window.scrollY + r.height * 0.5, 0.5);
+      }
+      await wait(520);
 
-        // Typing speed: 24-32ms for short, ~7ms for long text
-        const delay = Math.min(32, Math.max(7, 1400 / chars.length));
+      // Reveal element container
+      el.classList.remove("pre");
+      el.classList.add(chars.length > 3 ? "shellin" : "fillin");
+      setTimeout(() => el.classList.remove("shellin", "fillin"), 1000);
 
+      if (chars.length === 0) {
+        // Graphic or card: sweep cursor across
+        const r = R();
+        place(cur, r.left + window.scrollX + r.width * 0.9, r.top + window.scrollY + r.height * 0.55, 0.75);
+        await wait(800);
+      } else {
+        // Type characters sequentially with cursor riding the caret
+        const delay = Math.min(32, Math.max(8, 1400 / chars.length));
         let prev: HTMLElement | null = null;
         for (const c of chars) {
           if (!isAlive) break;
@@ -118,35 +175,26 @@ export default function CursorLayer() {
           prev = c;
 
           const q = c.getBoundingClientRect();
-          place(cur, q.right + window.scrollX, q.top + window.scrollY + 4, delay / 1000 + 0.04);
+          place(cur, q.right + window.scrollX, q.top + window.scrollY + q.height * 0.62, delay / 1000 + 0.04);
           await wait(delay);
         }
 
         await wait(180);
         if (prev) prev.classList.remove("caret");
-      } else {
-        // Graphic or card block: sweep across as it wipes in
-        const r = el.getBoundingClientRect();
-        place(cur, r.left + window.scrollX + r.width * 0.1, r.top + window.scrollY + r.height * 0.5, 0.45);
-        await wait(450);
-        place(cur, r.left + window.scrollX + r.width * 0.9, r.top + window.scrollY + r.height * 0.55, 0.7);
-        await wait(700);
       }
-
-      job.onComplete?.();
     }
 
     async function buildBlock(cur: HTMLElement, job: BuildJob) {
       const el = job.element;
       let r = el.getBoundingClientRect();
 
-      // If user already scrolled past, reveal immediately and continue
-      if (r.bottom < 40 || r.top > window.innerHeight - 20) {
-        job.onComplete?.();
+      // If user scrolled completely past this block, reveal immediately
+      if (r.bottom < -100 || r.top > window.innerHeight + 500) {
+        cursorQueue.reveal(el);
         return;
       }
 
-      const pad = 6;
+      const pad = 8;
       setAct(cur, "drawing");
 
       // 1. Move to block start
@@ -159,28 +207,39 @@ export default function CursorLayer() {
         cur,
         r.left + window.scrollX - pad,
         r.top + window.scrollY - pad,
-        r.width + pad * 2,
-        r.height + pad * 2
+        Math.max(48, r.width + pad * 2),
+        Math.max(28, r.height + pad * 2)
       );
-      await wait(120);
+      await wait(140);
 
-      // 3. Step inside and type/sweep
+      // 3. Step inside and type / sweep
       setAct(cur, "typing");
-      await revealContent(cur, job);
+      await fillContent(cur, el, job.isGraphic);
 
       // 4. Glide to free spot and dismiss box
       setAct(cur, pick(["reviewing", "styling", "idle"]));
       const [freeX, freeY] = findFreeSpot(box.getBoundingClientRect());
       place(cur, freeX, freeY, 1.2);
-      await wait(200);
+      await wait(220);
       await dismissBox(box);
     }
 
-    async function cursorWorker(cur: HTMLElement, index: number) {
-      await wait(1200 + index * 400);
-      roam(cur, true);
+    let introDismissed = false;
+    const onIntroDismiss = () => {
+      introDismissed = true;
+    };
+    window.addEventListener("introDismissed", onIntroDismiss);
 
-      let nextRoamTime = performance.now() + rnd(1500, 3000);
+    async function cursorWorker(cur: HTMLElement, index: number) {
+      // Wait until intro loader completes (or 2.6s fallback)
+      const maxIntroWait = 2600 + index * 350;
+      const startT = performance.now();
+      while (!introDismissed && performance.now() - startT < maxIntroWait && isAlive) {
+        await wait(100);
+      }
+
+      roam(cur, true);
+      let nextRoamTime = performance.now() + rnd(1000, 2500);
 
       while (isAlive) {
         if (document.hidden) {
@@ -190,15 +249,16 @@ export default function CursorLayer() {
 
         const job = cursorQueue.dequeue();
         if (job) {
+          if (job.timeoutId) clearTimeout(job.timeoutId);
           await buildBlock(cur, job);
           nextRoamTime = performance.now() + rnd(800, 1800);
           continue;
         }
 
         if (performance.now() > nextRoamTime) {
-          setAct(cur, pick(["reviewing", "idle", "styling"]));
+          setAct(cur, pick(["reviewing", "idle", "styling", "editing"]));
           roam(cur);
-          nextRoamTime = performance.now() + rnd(2800, 4200);
+          nextRoamTime = performance.now() + rnd(2600, 4200);
         } else {
           await wait(180);
         }
@@ -222,8 +282,19 @@ export default function CursorLayer() {
       cursorWorker(cur, i);
     });
 
+    // Auto-discover any .live-build-target elements in DOM
+    const scanDom = () => {
+      document.querySelectorAll<HTMLElement>(".live-build-target").forEach((el) => {
+        cursorQueue.registerBlock(el);
+      });
+    };
+    scanDom();
+    const domTimer = setTimeout(scanDom, 800);
+
     return () => {
       isAlive = false;
+      window.removeEventListener("introDismissed", onIntroDismiss);
+      clearTimeout(domTimer);
       cursorNodes.forEach((node) => node.remove());
     };
   }, []);
@@ -235,9 +306,12 @@ export default function CursorLayer() {
       aria-hidden="true"
       style={{
         position: "absolute",
-        inset: 0,
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
         pointerEvents: "none",
-        overflow: "hidden",
+        overflow: "visible",
         zIndex: 70,
       }}
     />

@@ -21,9 +21,6 @@ export default function Home() {
       {/* ─── Intro loader (particle orb + GJ initials, auto-dismisses at 2.3s) ─── */}
       <IntroLoader />
 
-      {/* ─── Unified Multi-Cursor Layer across ALL sections ─── */}
-      <CursorLayer />
-
       {/* ─── Main page (relative positioning for cursor coordinates) ─── */}
       <main
         style={{
@@ -33,6 +30,9 @@ export default function Home() {
           overflowX: "hidden",
         }}
       >
+        {/* ─── Unified Multi-Cursor Layer across ALL sections ─── */}
+        <CursorLayer />
+
         {/* ─── Subtle canvas particle background ─── */}
         <CyberBackground />
 
